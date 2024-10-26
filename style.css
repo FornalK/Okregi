@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: black;
+}
+
+#instruction {
+	background-color: rgb(228, 229, 230);
+	padding: 10px 20px;
+	margin: 40px;
+    font-size: 16px;
+}
+
+#showCircleBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#nextScenarioBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+#container {
+    position: relative;
+    width: 1060px;
+    height: 1060px;
+	display: none;
+}
+
+#ring {
+	border-radius: 50%;
+	background-color: rgb(228, 229, 230);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ringBig {
+	width: 1020px;
+	height: 1020px;
+}
+
+.ringMedium {
+	width: 910px;
+	height: 910px;
+}
+
+.ringSmall {
+	width: 800px;
+	height: 800px;
+}
+
+.ringContrast1 {
+	border: 20px solid #9300F5;
+}
+
+.ringContrast2 {
+	border: 20px solid #000000;
+}
+
+.ringContrast3 {
+	border: 20px solid #000000;
+}
+
+.circle {
+	width: 16px; /* Rozmiar małych kółek */
+	height: 16px;
+	border-radius: 50%;
+	position: absolute;
+	opacity: 50%;
+}
+
+/* Pozycjonowanie małych kółek */
+.top {
+	/* top: 2px; /* Odsunięcie od górnej krawędzi */
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.bottom {
+	/* bottom: 2px; /* Odsunięcie od dolnej krawędzi */
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.left {
+	/* left: 2px; /* Odsunięcie od lewej krawędzi */
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.right {
+	/* right: 2px; /* Odsunięcie od prawej krawędzi */
+	top: 50%;
+	transform: translateY(-50%);
+}

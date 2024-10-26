@@ -1,0 +1,8 @@
+3 okregi 
+mryganie 1, 2, 4 hz
+
+Kontrast1: #9300F5 #2B00FF
+Kontrast2: #000000 #9C9C9C
+Kontrast3: #000000 #FFFC99
+
+Wszelkie zdarzenia z odpowiadającymi czasami powinny być zapisane do pliku
