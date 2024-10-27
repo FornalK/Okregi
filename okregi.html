@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Okregi</title>
-	<link rel="stylesheet" href="style.css">
+    <title>Okręgi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div id="instruction">INSTRUKCJE STARTOWE DLA UZYTKOWNIKA</div>
-	<button id="showCircleBtn">START</button>
-    <div id="container">
+    <div id="instruction">INSTRUKCJE STARTOWE DLA UŻYTKOWNIKA</div>
+    <button id="showCircleBtn">START</button>
+    <div id="container" style="display:none;">
         <div id="ring">
-            <button id="nextScenarioBtn">DALEJ</button>
+            <div id="questionContainer">
+                <img id="questionImage" src="" alt="Pytanie">
+            </div>
         </div>
         <div class="circle top"></div>
         <div class="circle bottom"></div>
@@ -22,7 +24,14 @@
         <div class="circle bottomLeft"></div>
         <div class="circle bottomRight"></div>
     </div>
-	
-	<script src="main.js"></script>
+
+    <div id="answers" style="display:none;">
+        <img id="answerA" src="" alt="Odpowiedź A" onclick="selectAnswer('A')">
+        <img id="answerB" src="" alt="Odpowiedź B" onclick="selectAnswer('B')">
+        <img id="answerC" src="" alt="Odpowiedź C" onclick="selectAnswer('C')">
+        <img id="answerD" src="" alt="Odpowiedź D" onclick="selectAnswer('D')">
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>

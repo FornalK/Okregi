@@ -40,6 +40,84 @@ let scenario = 0;
 let blinkingIntervalId;
 let selected_dot;
 //console.time('myTimer')
+let selectedDot;
+let highlightedDots = [];
+let answeredQuestions = [];
+
+document.getElementById('showCircleBtn').addEventListener('click', function() {
+    document.getElementById('container').style.display = 'block';
+    this.remove();
+    document.getElementById('instruction').remove();
+    showNextQuestion();
+});
+
+function showNextQuestion() {
+    if (answeredQuestions.length >= 20) {
+        alert("Quiz zakończony!");
+        return;
+    }
+
+    const questionNumber = Math.floor(Math.random() * 128) + 1;
+    document.getElementById('questionImage').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}.png`;
+    
+    document.getElementById('answers').style.display = 'none'; // Ukryj odpowiedzi
+    highlightedDots = [];
+    startBlinkingDots();
+
+    setTimeout(() => {
+        stopBlinkingDots();
+        displayAnswers(questionNumber);
+    }, 10000);
+    askAdditionalQuestion();
+}
+
+function displayAnswers(questionNumber) {
+    document.getElementById('answers').style.display = 'flex';
+    document.getElementById('answerA').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_A.png`;
+    document.getElementById('answerB').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_B.png`;
+    document.getElementById('answerC').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_C.png`;
+    document.getElementById('answerD').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_D.png`;
+}
+
+function selectAnswer(answer) {
+    answeredQuestions.push({ questionNumber: answeredQuestions.length + 1, answer });
+    document.getElementById('answers').style.display = 'none';
+    showNextQuestion();
+}
+
+function startBlinkingDots() {
+    const hz = scenarios[scenario][5];
+    clearInterval(blinkingIntervalId);
+
+    blinkingIntervalId = setInterval(() => {
+        const randomDot = dots[Math.floor(Math.random() * dots.length)];
+        const elements = document.getElementsByClassName(randomDot);
+        selectedDot = elements[0];
+        selectedDot.style.opacity = '100%';
+        highlightedDots.push(randomDot);
+
+        setTimeout(() => {
+            selectedDot.style.opacity = '50%';
+        }, 500);
+    }, 1000 / hz);
+}
+
+function stopBlinkingDots() {
+    clearInterval(blinkingIntervalId);
+}
+
+function askAdditionalQuestion(questionNumber) {
+    const userResponse = prompt("Ile kropek było podświetlonych?");
+    const correctAnswer = highlightedDots.length;
+
+    answeredQuestions.push({
+        questionNumber,
+        additionalQuestion: "Ile kropek było podświetlonych?",
+        userResponse: userResponse,
+        correctAnswer: correctAnswer
+    });
+}
+
 
 // Podpięcie funkcji anonimowej, uruchamiajacej eksperyment i usuwajacej elemnty startowe
 document.getElementById('showCircleBtn').addEventListener('click', function() {
