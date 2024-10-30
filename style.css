@@ -6,7 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: black;
+    background-color: rgb(119, 119, 119);;
 }
 
 #instruction {
@@ -39,7 +39,7 @@ body {
 
 #ring {
 	border-radius: 50%;
-	background-color: rgb(228, 229, 230);
+	background-color: rgb(119, 119, 119);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -67,7 +67,7 @@ body {
 }
 
 .ringContrast1 {
-	border: 20px solid #9300F5;
+	border: 20px solid #000000;
 }
 
 .ringContrast2 {
