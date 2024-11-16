@@ -1,3 +1,4 @@
+/* style.css */
 body {
     margin: 0;
     padding: 0;
@@ -83,7 +84,7 @@ body {
 	height: 16px;
 	border-radius: 50%;
 	position: absolute;
-	opacity: 50%;
+	opacity: 0%;
 }
 
 /* Pozycjonowanie małych kółek */
@@ -109,4 +110,36 @@ body {
 	/* right: 2px; /* Odsunięcie od prawej krawędzi */
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+
+#questionContainer {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	margin-bottom: 10%;
+}
+
+#questionImage {
+    width: 80%;
+    height: auto;
+    border-radius: 5%;
+}
+
+#answers {
+    display: flex;
+    gap: 10px;
+    margin-top: 20%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#answers img {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
 }
