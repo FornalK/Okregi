@@ -5,35 +5,35 @@ const dots = [
 ];
 
 const scenarios = [
-    ["ringSmall", "ringContrast1", "#2B00FF", "112px", "232px", 1],
-    ["ringMedium", "ringContrast1", "#2B00FF", "57px", "193px", 1],
-    ["ringBig", "ringContrast1", "#2B00FF", "2px", "154px", 1],
-    ["ringSmall", "ringContrast2", "#9C9C9C", "112px", "232px", 1],
-    ["ringMedium", "ringContrast2", "#9C9C9C", "57px", "193px", 1],
-    ["ringBig", "ringContrast2", "#9C9C9C", "2px", "154px",  1],
-    ["ringSmall", "ringContrast3", "#FFFC99", "112px", "232px",  1],
-    ["ringMedium", "ringContrast3", "#FFFC99", "57px", "193px",  1],
-    ["ringBig", "ringContrast3", "#FFFC99", "2px", "154px",  1],
+    ["ringSmall", "ringContrast1", "#0000ff", "112px", "232px", 1],
+    ["ringMedium", "ringContrast1", "#0000ff", "57px", "193px", 1],
+    ["ringBig", "ringContrast1", "##0000ff", "2px", "154px", 1],
+    ["ringSmall", "ringContrast2", "#ff0000", "112px", "232px", 1],
+    ["ringMedium", "ringContrast2", "#ff0000", "57px", "193px", 1],
+    ["ringBig", "ringContrast2", "#ff0000", "2px", "154px",  1],
+    ["ringSmall", "ringContrast3", "#ffff00", "112px", "232px",  1],
+    ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px",  1],
+    ["ringBig", "ringContrast3", "#ffff00", "2px", "154px",  1],
     
-    ["ringSmall", "ringContrast1", "#2B00FF", "112px", "232px", 2],
-    ["ringMedium", "ringContrast1", "#2B00FF", "57px", "193px", 2],
-    ["ringBig", "ringContrast1", "#2B00FF", "2px", "154px", 2],
-    ["ringSmall", "ringContrast2", "#9C9C9C", "112px", "232px", 2],
-    ["ringMedium", "ringContrast2", "#9C9C9C", "57px", "193px", 2],
-    ["ringBig", "ringContrast2", "#9C9C9C", "2px", "154px", 2],
-    ["ringSmall", "ringContrast3", "#FFFC99", "112px", "232px", 2],
-    ["ringMedium", "ringContrast3", "#FFFC99", "57px", "193px", 2],
-    ["ringBig", "ringContrast3", "#FFFC99", "2px", "154px", 2],
+    ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 2],
+    ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 2],
+    ["ringBig", "ringContrast1", "#7b00ff", "2px", "154px", 2],
+    ["ringSmall", "ringContrast2", "#ff0000", "112px", "232px", 2],
+    ["ringMedium", "ringContrast2", "#ff0000", "57px", "193px", 2],
+    ["ringBig", "ringContrast2", "#ff0000", "2px", "154px", 2],
+    ["ringSmall", "ringContrast3", "#ffff00", "112px", "232px", 2],
+    ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px", 2],
+    ["ringBig", "ringContrast3", "#ffff00", "2px", "154px", 2],
 
-    ["ringSmall", "ringContrast1", "#2B00FF", "112px", "232px", 4],
-    ["ringMedium", "ringContrast1", "#2B00FF", "57px", "193px", 4],
-    ["ringBig", "ringContrast1", "#2B00FF", "2px", "154px", 4],
-    ["ringSmall", "ringContrast2", "#9C9C9C", "112px", "232px", 4],
-    ["ringMedium", "ringContrast2", "#9C9C9C", "57px", "193px", 4],
-    ["ringBig", "ringContrast2", "#9C9C9C", "2px", "154px", 4],
-    ["ringSmall", "ringContrast3", "#FFFC99", "112px", "232px", 4],
-    ["ringMedium", "ringContrast3", "#FFFC99", "57px", "193px", 4],
-    ["ringBig", "ringContrast3", "#FFFC99", "2px", "154px", 4],
+    ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 4],
+    ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 4],
+    ["ringBig", "ringContrast1", "##7b00ff", "2px", "154px", 4],
+    ["ringSmall", "ringContrast2", "#ff0000", "112px", "232px", 4],
+    ["ringMedium", "ringContrast2", "#ff0000", "57px", "193px", 4],
+    ["ringBig", "ringContrast2", "#ff0000", "2px", "154px", 4],
+    ["ringSmall", "ringContrast3", "#ffff00", "112px", "232px", 4],
+    ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px", 4],
+    ["ringBig", "ringContrast3", "#ffff00", "2px", "154px", 4],
 ]
 
 let scenario = 0;
@@ -45,14 +45,22 @@ let highlightedDots = [];
 let answeredQuestions = [];
 
 document.getElementById('showCircleBtn').addEventListener('click', function() {
-    document.getElementById('container').style.display = 'block';
-    this.remove();
-    document.getElementById('instruction').remove();
-    showNextQuestion();
+    // Znajdujemy kontener z okręgiem
+    var container = document.getElementById('container');
+    
+    // Ustawiamy styl display na 'block', aby pokazać ukryty kontener
+    container.style.display = 'block';
+	
+	// Usuwamy przycisk oraz instrukcje startowa po kliknięciu
+	this.remove();
+	document.getElementById('instruction').remove();
+
+    // Wystartowanie z pierwszym scenariuszem
+    nextScenario();
 });
 
 function showNextQuestion() {
-    if (answeredQuestions.length >= 20) {
+    if (answeredQuestions.length >= 27) {
         alert("Quiz zakończony!");
         return;
     }
@@ -60,15 +68,13 @@ function showNextQuestion() {
     const questionNumber = Math.floor(Math.random() * 128) + 1;
     document.getElementById('questionImage').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}.png`;
     
-    document.getElementById('answers').style.display = 'none'; // Ukryj odpowiedzi
-    highlightedDots = [];
-    startBlinkingDots();
+    displayAnswers(questionNumber);
+    // highlightedDots = [];
 
-    setTimeout(() => {
-        stopBlinkingDots();
-        displayAnswers(questionNumber);
-    }, 10000);
-    askAdditionalQuestion();
+    // setTimeout(() => {
+    //     displayAnswers(questionNumber);
+    // }, 1000);
+    //askAdditionalQuestion();
 }
 
 function displayAnswers(questionNumber) {
@@ -82,28 +88,7 @@ function displayAnswers(questionNumber) {
 function selectAnswer(answer) {
     answeredQuestions.push({ questionNumber: answeredQuestions.length + 1, answer });
     document.getElementById('answers').style.display = 'none';
-    showNextQuestion();
-}
-
-function startBlinkingDots() {
-    const hz = scenarios[scenario][5];
-    clearInterval(blinkingIntervalId);
-
-    blinkingIntervalId = setInterval(() => {
-        const randomDot = dots[Math.floor(Math.random() * dots.length)];
-        const elements = document.getElementsByClassName(randomDot);
-        selectedDot = elements[0];
-        selectedDot.style.opacity = '100%';
-        highlightedDots.push(randomDot);
-
-        setTimeout(() => {
-            selectedDot.style.opacity = '50%';
-        }, 500);
-    }, 1000 / hz);
-}
-
-function stopBlinkingDots() {
-    clearInterval(blinkingIntervalId);
+    nextScenario();
 }
 
 function askAdditionalQuestion(questionNumber) {
@@ -139,7 +124,7 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
 // Funkcja przechodzaca do kolejnego scenariusza
 function nextScenario() {
     //console.log(scenarios[scenario]);
-    
+    console.log("git");
     // Ustawia klas dla okręgu
     var ring = document.getElementById('ring');
     if (scenario > 0) {
@@ -154,7 +139,7 @@ function nextScenario() {
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
         circle.style.backgroundColor = scenarios[scenario][2];
-        circle.style.opacity = "50%";
+        circle.style.opacity = "0%";
     });
 
     circles[0].style.top = scenarios[scenario][3];
@@ -173,7 +158,7 @@ function nextScenario() {
     
     // Uruchomienie funkcji która ma mrygać
 	blinking(scenarios[scenario][5]);
-    
+    showNextQuestion()
     scenario += 1;
 
     if (scenario == scenarios.length) {
