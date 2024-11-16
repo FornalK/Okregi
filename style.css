@@ -24,12 +24,11 @@ body {
     margin-bottom: 20px;
 }
 
-#nextScenarioBtn {
+#nextScenarioBtn{
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
 }
-
 
 #container {
     position: relative;
@@ -120,10 +119,11 @@ body {
     align-items: center;
     justify-content: center;
 	margin-bottom: 10%;
+	position: relative;
 }
 
 #questionImage {
-    width: 80%;
+    width: 100%;
     height: auto;
     border-radius: 5%;
 }
@@ -141,5 +141,26 @@ body {
 #answers img {
     width: 60px;
     height: 60px;
+    cursor: pointer;
+}
+
+#didntBlink {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	
+}
+
+#didntBlinkText{
+    padding: 20px 20px;
+    font-size: 16px;
+}
+
+#didntBlinkBtn{
+    padding: 20px 20px;
+    font-size: 16px;
     cursor: pointer;
 }
