@@ -45,9 +45,42 @@ let selectedDot;
 let highlightedDots = [];
 let answeredQuestions = [];
 let answeredDots = [];
+let availableQuestions = Array.from({ length: 128 }, (_, i) => i + 1);
+
+let experimentData = {
+    startTime: null,
+    endTime: null,
+    answeredQuestions: [],
+    answeredDots: []
+};
+
+// // Przykład ustawienia czasu rozpoczęcia
+// experimentData.startTime = new Date().toISOString();
+
+// // Po zakończeniu scenariuszy
+// experimentData.endTime = new Date().toISOString();
+// saveToFile('experiment_results.json', experimentData);
+
+// Funkcja zapisu do pliku
+const fs = require('fs');
+
+function saveToFile(filename, data) {
+    fs.writeFile(filename, JSON.stringify(data, null, 2), 'utf8', (err) => {
+        if (err) {
+            console.error("Błąd podczas zapisu do pliku:", err);
+        } else {
+            console.log("Zapisano dane do pliku:", filename);
+        }
+    });
+}
+
+
 
 // Podpięcie funkcji anonimowej, uruchamiajacej eksperyment i usuwajacej elemnty startowe
 document.getElementById('showCircleBtn').addEventListener('click', function() {
+    // Zapis czasu rozpoczęcia i zakończenia eksperymentu
+    experimentData.startTime = new Date().toISOString();
+
     // Znajdujemy kontener z okręgiem
     var container = document.getElementById('container');
     
@@ -80,6 +113,15 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     nextScenario();
 });
 
+// Funkcja losowania pytania
+function getRandomQuestion() {
+    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+    const questionNumber = availableQuestions[randomIndex];
+    availableQuestions.splice(randomIndex, 1); // Usuń użyte pytanie
+    return questionNumber;
+}
+
+
 function showNextQuestion() {
     const questionNumber = Math.floor(Math.random() * 128) + 1;
     let questionImg = document.getElementById('questionImage');
@@ -98,6 +140,10 @@ function displayAnswers(questionNumber) {
 }
 
 function saveDotSelection(nr) {
+    const selectedDotName = dots[nr];
+    answeredDots.push(selectedDotName);
+
+    experimentData.answeredDots = answeredDots;
     answeredDots.push(dots[nr]);
 
     document.getElementById('didntBlinkText').style.display = 'none';
@@ -107,6 +153,12 @@ function saveDotSelection(nr) {
 }
 
 function selectAnswer(answer) {
+    const isCorrect = checkAnswer(answer); // Funkcja do sprawdzania poprawności odpowiedzi
+    answeredQuestions.push({ 
+        questionNumber: answeredQuestions.length + 1, 
+        answer, 
+        isCorrect 
+    });
     answeredQuestions.push({ questionNumber: answeredQuestions.length + 1, answer });
     document.getElementById('answers').style.display = 'none';
 
@@ -141,6 +193,11 @@ function nextScenario() {
     //console.log(scenarios[scenario]);
     console.log(answeredDots);
     if (scenario == scenarios.length) {
+
+        // Zapis czasu rozpoczęcia i zakończenia eksperymentu
+        experimentData.endTime = new Date().toISOString();
+        saveToFile('experiment_results.json', experimentData);
+
         // Znajdujemy kontener z okręgiem
         var container = document.getElementById('container');
         
