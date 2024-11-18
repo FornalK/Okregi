@@ -1,3 +1,4 @@
+const user= "user1";
 // Nazwy klas wszystkich kropek na okręgach
 const dots = [
     "top", "bottom", "left", "right",
@@ -37,9 +38,9 @@ const scenarios = [
 ]
 
 let scenario = 0;
+let randomNr = 0;
 let blinkingIntervalId;
 let blinkingTimeoutId;
-let selected_dot;
 //console.time('myTimer')
 let selectedDot;
 let highlightedDots = [];
@@ -61,25 +62,35 @@ let experimentData = {
 // experimentData.endTime = new Date().toISOString();
 // saveToFile('experiment_results.json', experimentData);
 
-// Funkcja zapisu do pliku
-const fs = require('fs');
+async function saveLine(filename, line) {
+    try {
+        const response = await fetch('/save-data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename, line }), // Przesyłamy nazwę pliku i treść
+        });
 
-function saveToFile(filename, data) {
-    fs.writeFile(filename, JSON.stringify(data, null, 2), 'utf8', (err) => {
-        if (err) {
-            console.error("Błąd podczas zapisu do pliku:", err);
+        if (response.ok) {
+            console.log(`Linia zapisana w pliku ${filename}.`);
         } else {
-            console.log("Zapisano dane do pliku:", filename);
+            console.error("Błąd podczas zapisu linii.");
         }
-    });
+    } catch (error) {
+        console.error("Błąd połączenia z serwerem:", error);
+    }
 }
-
-
 
 // Podpięcie funkcji anonimowej, uruchamiajacej eksperyment i usuwajacej elemnty startowe
 document.getElementById('showCircleBtn').addEventListener('click', function() {
-    // Zapis czasu rozpoczęcia i zakończenia eksperymentu
-    experimentData.startTime = new Date().toISOString();
+    // Zapis czasu rozpoczęcia eksperymentu
+    experimentData.startTime = new Date();
+
+    // zapis do wszytkich plików inforamcji o nr uzytkownika i czasie startu
+    saveLine("results.txt", "\n" + user + "\n");
+    saveLine("results.txt", "Czas startu: " + experimentData.startTime.toISOString());
+
+    saveLine("dots.txt", "\n" + user + "\n");
+    saveLine("dots.txt", "Czas startu: " + experimentData.startTime.toISOString());
 
     // Znajdujemy kontener z okręgiem
     var container = document.getElementById('container');
@@ -109,8 +120,16 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     
     document.getElementById('didntBlinkText').style.display = 'none';
     document.getElementById('didntBlinkBtn').style.display = 'none';
+
+    //zapis do pliku txt
+    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[randomNr], 'none'];
+    line = line_elements.join("\t");
+    saveLine("dots.txt", line);
+
     //wystartowanie nastepnego scenraiusza
+    scenario += 1;
     nextScenario();
+
 });
 
 // Funkcja losowania pytania
@@ -148,12 +167,20 @@ function saveDotSelection(nr) {
 
     document.getElementById('didntBlinkText').style.display = 'none';
     document.getElementById('didntBlinkBtn').style.display = 'none';
+
+    //zapis do pliku txt
+    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[randomNr], selectedDotName];
+    line = line_elements.join("\t");
+    saveLine("dots.txt", line);
+
     //wystartowanie nastepnego scenraiusza
+    scenario += 1;
     nextScenario();
 }
 
 function selectAnswer(answer) {
-    const isCorrect = checkAnswer(answer); // Funkcja do sprawdzania poprawności odpowiedzi
+    // const isCorrect = checkAnswer(answer); // Funkcja do sprawdzania poprawności odpowiedzi
+    const isCorrect = true;
     answeredQuestions.push({ 
         questionNumber: answeredQuestions.length + 1, 
         answer, 
@@ -191,12 +218,18 @@ function selectAnswer(answer) {
 // Funkcja przechodzaca do kolejnego scenariusza
 function nextScenario() {
     //console.log(scenarios[scenario]);
-    console.log(answeredDots);
+    //console.log(answeredDots);
     if (scenario == scenarios.length) {
 
         // Zapis czasu rozpoczęcia i zakończenia eksperymentu
-        experimentData.endTime = new Date().toISOString();
-        saveToFile('experiment_results.json', experimentData);
+        experimentData.endTime = new Date()
+        czas_trwania = ((experimentData.endTime - experimentData.startTime) / 1000).toString();
+        // zapis do wszytkich plików inforamcji o czasie zakonczenia i dlugosci eksp
+        saveLine("results.txt", "Czas zakonczenia: " + experimentData.endTime.toISOString());
+        saveLine("results.txt", "Czas trwania: " + czas_trwania);
+
+        saveLine("dots.txt", "Czas zakonczenia: " + experimentData.endTime.toISOString());
+        saveLine("dots.txt", "Czas trwania: " + czas_trwania);
 
         // Znajdujemy kontener z okręgiem
         var container = document.getElementById('container');
@@ -247,8 +280,6 @@ function nextScenario() {
     runBlinking(delay, interval, reps);
 
     showNextQuestion()
-    scenario += 1;
-    // console.log(scenario);
 }
 
 // Funkcja mrygajaca losowym kolkiem
@@ -276,17 +307,17 @@ function runBlinking(opoznienie, interwal, liczbaWywolan) {
     // zatrzymanie starego mrygania
     clearInterval(blinkingIntervalId);
     clearTimeout(blinkingTimeoutId);
-
-    const randomDot = dots[Math.floor(Math.random() * dots.length)];
+    randomNr = Math.floor(Math.random() * dots.length);
+    const randomDot = dots[randomNr];
     const elements = document.getElementsByClassName(randomDot);
-    selected_dot = elements[0];
+    selectedDot = elements[0];
     blinkingTimeoutId = setTimeout(() => {
         let licznik = 0;
         blinkingIntervalId = setInterval(() => {
-            if (selected_dot.style.opacity == 0) {
-                selected_dot.style.opacity = '100%';
+            if (selectedDot.style.opacity == 0) {
+                selectedDot.style.opacity = '100%';
             } else {
-                selected_dot.style.opacity = '0%';
+                selectedDot.style.opacity = '0%';
             }
             
             licznik++;

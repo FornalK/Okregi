@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okręgi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="instruction">INSTRUKCJE STARTOWE DLA UŻYTKOWNIKA</div>
+    <button id="showCircleBtn">START</button>
+    <div id="container" style="display:none;">
+        <div id="ring">
+            <div id="questionContainer">
+                <img id="questionImage" src="" alt="Pytanie">
+            </div>
+            <div id="answers" style="display:none;">
+                <img id="answerA" src="" alt="Odpowiedź A" onclick="selectAnswer('A')">
+                <img id="answerB" src="" alt="Odpowiedź B" onclick="selectAnswer('B')">
+                <img id="answerC" src="" alt="Odpowiedź C" onclick="selectAnswer('C')">
+                <img id="answerD" src="" alt="Odpowiedź D" onclick="selectAnswer('D')">
+            </div>
+        </div>
+        <div class="circle top"></div>
+        <div class="circle bottom"></div>
+        <div class="circle left"></div>
+        <div class="circle right"></div>
+        <div class="circle topLeft"></div>
+        <div class="circle topRight"></div>
+        <div class="circle bottomLeft"></div>
+        <div class="circle bottomRight"></div>
+    </div>
+    <div id="didntBlink">
+        <div id="didntBlinkText" style="display:none;">Zaznacz kropke, która mrygała:</button>
+        <button id="didntBlinkBtn" style="display:none;">ŻADNA NIE MRYGAŁA</button>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

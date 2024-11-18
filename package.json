@@ -1,0 +1,23 @@
+{
+  "name": "okregi",
+  "version": "1.0.0",
+  "description": "https://docs.google.com/document/d/1jLaj8MqPgw0HORaKeo7myivgAZlotr8Q/edit",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FornalK/Okregi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FornalK/Okregi/issues"
+  },
+  "homepage": "https://github.com/FornalK/Okregi#readme",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
