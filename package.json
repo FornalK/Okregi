@@ -4,7 +4,7 @@
   "description": "https://docs.google.com/document/d/1jLaj8MqPgw0HORaKeo7myivgAZlotr8Q/edit",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
