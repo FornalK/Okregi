@@ -65,8 +65,8 @@ function shuffleTab(tab) {
 // Wymieszanie tablicy scenarios
 shuffleTab(scenarios);
 
-let scenario = 0;
-let randomNr = 0;
+let scenario;
+let task_counter = 0;
 let blinkingIntervalId;
 let blinkingTimeoutId;
 //console.time('myTimer')
@@ -151,12 +151,12 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     document.getElementById('taskCounter').style.display = 'none';
 
     //zapis do pliku txt
-    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[scenarios[scenario][6]], 'none'];
+    const line_elements = [scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none'];
     line = line_elements.join("\t");
     saveLine("dots.txt", line);
 
     //wystartowanie nastepnego scenraiusza
-    scenario += 1;
+    task_counter += 1;
     nextScenario();
 
 });
@@ -198,12 +198,12 @@ function saveDotSelection(nr) {
     document.getElementById('taskCounter').style.display = 'none';
 
     //zapis do pliku txt
-    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[scenarios[scenario][6]], selectedDotName];
+    const line_elements = [scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName];
     line = line_elements.join("\t");
     saveLine("dots.txt", line);
 
     //wystartowanie nastepnego scenraiusza
-    scenario += 1;
+    task_counter += 1;
     nextScenario();
 }
 
@@ -222,7 +222,7 @@ function selectAnswer(answer) {
     document.getElementById('didntBlinkText').style.display = 'block';
     document.getElementById('didntBlinkBtn').style.display = 'block';
     // Wyswietlamy tez informacje ile na ile scenariuszy zrealizowano
-    let ile = 216 - scenarios.length + 1;
+    let ile = 216 - scenarios.length;
     document.getElementById('taskCounter').textContent = "Pytania: " + ile + "/216";
     document.getElementById('taskCounter').style.display = 'block';
 
@@ -248,9 +248,7 @@ function selectAnswer(answer) {
 
 // Funkcja przechodzaca do kolejnego scenariusza
 function nextScenario() {
-    //console.log(scenarios[scenario]);
-    //console.log(answeredDots);
-    if (scenario == scenarios.length) {
+    if (scenarios.length == 0) {
 
         // Zapis czasu rozpoczęcia i zakończenia eksperymentu
         experimentData.endTime = new Date()
@@ -271,44 +269,48 @@ function nextScenario() {
         return
     }
 
+    // Kolejnym scenariuszem jest zawsze ostatni element z tablicy scenariuszy
+    prev_scenario = scenario;
+    scenario = scenarios.pop()
+
     // Ustawia klas dla okręgu
     var ring = document.getElementById('ring');
-    if (scenario > 0) {
-        ring.classList.remove(scenarios[scenario-1][0]);
-        ring.classList.remove(scenarios[scenario-1][1]);
+    if (task_counter > 0) {
+        ring.classList.remove(prev_scenario[0]);
+        ring.classList.remove(prev_scenario[1]);
     }
 
-    ring.classList.add(scenarios[scenario][0]);
-    ring.classList.add(scenarios[scenario][1]);
+    ring.classList.add(scenario[0]);
+    ring.classList.add(scenario[1]);
 
     // Ustawia klasy dla kółek
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
-        circle.style.backgroundColor = scenarios[scenario][2];
+        circle.style.backgroundColor = scenario[2];
         circle.style.opacity = "33%";
         circle.style.cursor = 'auto';
     });
 
-    circles[0].style.top = scenarios[scenario][3];
-    circles[1].style.bottom = scenarios[scenario][3];
-    circles[2].style.left = scenarios[scenario][3];
-    circles[3].style.right = scenarios[scenario][3];
+    circles[0].style.top = scenario[3];
+    circles[1].style.bottom = scenario[3];
+    circles[2].style.left = scenario[3];
+    circles[3].style.right = scenario[3];
 
-    circles[4].style.top = scenarios[scenario][4];
-    circles[4].style.left = scenarios[scenario][4];
-    circles[5].style.top = scenarios[scenario][4];
-    circles[5].style.right = scenarios[scenario][4];
-    circles[6].style.bottom = scenarios[scenario][4];
-    circles[6].style.left = scenarios[scenario][4];
-    circles[7].style.bottom = scenarios[scenario][4];
-    circles[7].style.right = scenarios[scenario][4];
+    circles[4].style.top = scenario[4];
+    circles[4].style.left = scenario[4];
+    circles[5].style.top = scenario[4];
+    circles[5].style.right = scenario[4];
+    circles[6].style.bottom = scenario[4];
+    circles[6].style.left = scenario[4];
+    circles[7].style.bottom = scenario[4];
+    circles[7].style.right = scenario[4];
     
     // Uruchomienie funkcji która ma mrygać
 	//blinking(scenarios[scenario][5]);
     delay = Math.random() * 1500 + 1500; // opoznienie od 1.5 do 3 sekund
-    interval = 1000 / scenarios[scenario][5]; // ile razy na sekunde mryganie
-    reps = 4 * scenarios[scenario][5];
-    dotNr = scenarios[scenario][6];
+    interval = 1000 / scenario[5]; // ile razy na sekunde mryganie
+    reps = 4 * scenario[5];
+    dotNr = scenario[6];
     runBlinking(delay, interval, reps, dotNr);
 
     showNextQuestion()
