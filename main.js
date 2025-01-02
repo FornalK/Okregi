@@ -5,7 +5,7 @@ const dots = [
 	"topLeft", "topRight", "bottomLeft", "bottomRight"
 ];
 
-const scenarios = [
+const scenarios_template = [
     ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 1],
     ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 1],
     ["ringBig", "ringContrast1", "#7b00ff", "2px", "154px", 1],
@@ -36,6 +36,34 @@ const scenarios = [
     ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px", 4],
     ["ringBig", "ringContrast3", "#ffff00", "2px", "154px", 4],
 ]
+
+let scenarios = [];
+// Dodanie dla każdego scenariusza numeru kropki, czyli zrobienie 27 * 8 scenariuszy
+for (let i = 0; i < dots.length; i++) {
+    // kopia tablicy scenarios
+    let new27ScenariosPerDot = structuredClone(scenarios_template);
+    // Dodanie w kopii numeru kropki
+    for (let lista of new27ScenariosPerDot) {
+        lista.push(i);
+    }
+
+    // Polaczenie wszystkich scenairuszy
+    scenarios = scenarios.concat(new27ScenariosPerDot);
+}
+
+// algorytm Fisher-Yates Shuffle do losowego mieszania elementow tablicy
+function shuffleTab(tab) {
+    for (let i = tab.length - 1; i > 0; i--) {
+        // Wylosuj indeks z zakresu [0, i]
+        const j = Math.floor(Math.random() * (i + 1));
+        // Zamień elementy miejscami
+        [tab[i], tab[j]] = [tab[j], tab[i]];
+    }
+    return tab;
+}
+
+// Wymieszanie tablicy scenarios
+shuffleTab(scenarios);
 
 let scenario = 0;
 let randomNr = 0;
@@ -120,9 +148,10 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     
     document.getElementById('didntBlinkText').style.display = 'none';
     document.getElementById('didntBlinkBtn').style.display = 'none';
+    document.getElementById('taskCounter').style.display = 'none';
 
     //zapis do pliku txt
-    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[randomNr], 'none'];
+    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[scenarios[scenario][6]], 'none'];
     line = line_elements.join("\t");
     saveLine("dots.txt", line);
 
@@ -139,7 +168,6 @@ function getRandomQuestion() {
     availableQuestions.splice(randomIndex, 1); // Usuń użyte pytanie
     return questionNumber;
 }
-
 
 function showNextQuestion() {
     const questionNumber = Math.floor(Math.random() * 128) + 1;
@@ -167,9 +195,10 @@ function saveDotSelection(nr) {
 
     document.getElementById('didntBlinkText').style.display = 'none';
     document.getElementById('didntBlinkBtn').style.display = 'none';
+    document.getElementById('taskCounter').style.display = 'none';
 
     //zapis do pliku txt
-    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[randomNr], selectedDotName];
+    const line_elements = [scenarios[scenario][0], scenarios[scenario][1], scenarios[scenario][5], dots[scenarios[scenario][6]], selectedDotName];
     line = line_elements.join("\t");
     saveLine("dots.txt", line);
 
@@ -192,6 +221,10 @@ function selectAnswer(answer) {
     // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
     document.getElementById('didntBlinkText').style.display = 'block';
     document.getElementById('didntBlinkBtn').style.display = 'block';
+    // Wyswietlamy tez informacje ile na ile scenariuszy zrealizowano
+    let ile = 216 - scenarios.length + 1;
+    document.getElementById('taskCounter').textContent = "Pytania: " + ile + "/216";
+    document.getElementById('taskCounter').style.display = 'block';
 
     // musimy tez ukryc obecne zdjecie z pytaniem
     document.getElementById('questionImage').style.display = 'none';
@@ -207,11 +240,9 @@ function selectAnswer(answer) {
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
         circle.style.backgroundColor = "#FFFFFF";
-        circle.style.opacity = "75%";
+        circle.style.opacity = "33%";
         circle.style.cursor = 'pointer';
     });
-    
-    //nextScenario();
 }
 
 
@@ -254,7 +285,7 @@ function nextScenario() {
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
         circle.style.backgroundColor = scenarios[scenario][2];
-        circle.style.opacity = "0%";
+        circle.style.opacity = "33%";
         circle.style.cursor = 'auto';
     });
 
@@ -277,7 +308,8 @@ function nextScenario() {
     delay = Math.random() * 1500 + 1500; // opoznienie od 1.5 do 3 sekund
     interval = 1000 / scenarios[scenario][5]; // ile razy na sekunde mryganie
     reps = 4 * scenarios[scenario][5];
-    runBlinking(delay, interval, reps);
+    dotNr = scenarios[scenario][6];
+    runBlinking(delay, interval, reps, dotNr);
 
     showNextQuestion()
 }
@@ -303,21 +335,21 @@ function nextScenario() {
 // }
 
 // Funkcja mrygajaca losowym kolkiem
-function runBlinking(opoznienie, interwal, liczbaWywolan) {
+function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
     // zatrzymanie starego mrygania
     clearInterval(blinkingIntervalId);
     clearTimeout(blinkingTimeoutId);
-    randomNr = Math.floor(Math.random() * dots.length);
-    const randomDot = dots[randomNr];
-    const elements = document.getElementsByClassName(randomDot);
+    const dot = dots[dotNr];
+    const elements = document.getElementsByClassName(dot);
     selectedDot = elements[0];
     blinkingTimeoutId = setTimeout(() => {
         let licznik = 0;
         blinkingIntervalId = setInterval(() => {
-            if (selectedDot.style.opacity == 0) {
+            if (selectedDot.style.opacity == 0.33) {
+                console.log("Hej :)");
                 selectedDot.style.opacity = '100%';
             } else {
-                selectedDot.style.opacity = '0%';
+                selectedDot.style.opacity = '33%';
             }
             
             licznik++;
