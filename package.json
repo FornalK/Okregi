@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/FornalK/Okregi#readme",
   "dependencies": {
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "xlsx": "^0.18.5"
   }
 }
