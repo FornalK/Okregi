@@ -1,4 +1,3 @@
-const user= "user1";
 // Nazwy klas wszystkich kropek na okręgach
 const dots = [
     "top", "bottom", "left", "right",
@@ -110,6 +109,12 @@ async function saveLine(filename, line) {
 
 // Podpięcie funkcji anonimowej, uruchamiajacej eksperyment i usuwajacej elemnty startowe
 document.getElementById('showCircleBtn').addEventListener('click', function() {
+    // Dobranie sie do pola tekstowego z ekranu startowego
+    let textField = document.getElementById("user");
+    
+    // Pobranie wartości wpisanej przez użytkownika
+    let user = textField.value;
+
     // Zapis czasu rozpoczęcia eksperymentu
     experimentData.startTime = new Date();
 
@@ -126,9 +131,10 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
     // Ustawiamy styl display na 'block', aby pokazać ukryty kontener
     container.style.display = 'block';
 	
-	// Usuwamy przycisk oraz instrukcje startowa po kliknięciu
+	// Usuwamy przycisk oraz instrukcje startowa i pole tekstowe po kliknięciu
 	this.remove();
 	document.getElementById('instruction').remove();
+    textField.remove();
 
     // Przypisanie do kółek nasluchiwania na kliknięcie
     var circles = document.querySelectorAll('.circle');
@@ -201,6 +207,21 @@ function saveDotSelection(nr) {
     const line_elements = [scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName];
     line = line_elements.join("\t");
     saveLine("dots.txt", line);
+
+    // Jeśli użytkownik dobrze odpowiedział, trzeba sprawdzić czy nie ma wyższych kontrastów
+    // które należy usunać z listy scenariuszy 
+    if (dots[scenario[6]] == selectedDotName && scenario[1] != "ringContrast3") {
+        for (let i = scenarios.length - 1; i > -1; i--) {
+            if (scenarios[i][6] == scenario[6] && scenarios[i][0] == scenario[0] && scenarios[i][5] == scenario[5]){
+                if (scenario[1] == "ringContrast2" && scenarios[i][1] == "ringContrast1")
+                    continue;
+                
+                scenarios.splice(i, 1);
+                console.log("Buu!");
+            }
+        }
+
+    }
 
     //wystartowanie nastepnego scenraiusza
     task_counter += 1;
@@ -348,7 +369,6 @@ function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
         let licznik = 0;
         blinkingIntervalId = setInterval(() => {
             if (selectedDot.style.opacity == 0.33) {
-                console.log("Hej :)");
                 selectedDot.style.opacity = '100%';
             } else {
                 selectedDot.style.opacity = '33%';
