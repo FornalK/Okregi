@@ -67,6 +67,7 @@ shuffleTab(scenarios);
 let user;
 let scenario;
 let task_counter = 0;
+let number_of_tasks = 216;
 let blinkingIntervalId;
 let blinkingTimeoutId;
 //console.time('myTimer')
@@ -158,9 +159,18 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
 
     //wystartowanie nastepnego scenraiusza
     task_counter += 1;
+    progressBarUpdate()
     nextScenario();
 
 });
+
+// Akutalizacja progress baru
+function progressBarUpdate() {
+    const progressBar = document.getElementById("progress-bar");
+    // Aktualizuj szerokość paska postępu
+    const progressPercentage = ((number_of_tasks - scenarios.length) / number_of_tasks) * 100;
+    progressBar.style.width = `${progressPercentage}%`;
+};
 
 // Funkcja losowania pytania
 function getRandomQuestion() {
@@ -216,7 +226,6 @@ function saveDotSelection(nr) {
                     continue;
                 
                 scenarios.splice(i, 1);
-                console.log("Buu!");
             }
         }
 
@@ -224,6 +233,7 @@ function saveDotSelection(nr) {
 
     //wystartowanie nastepnego scenraiusza
     task_counter += 1;
+    progressBarUpdate()
     nextScenario();
 }
 
@@ -241,9 +251,8 @@ function selectAnswer(answer) {
     // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
     document.getElementById('didntBlinkText').style.display = 'block';
     document.getElementById('didntBlinkBtn').style.display = 'block';
+    
     // Wyswietlamy tez informacje ile na ile scenariuszy zrealizowano
-    let ile = 216 - scenarios.length;
-    document.getElementById('taskCounter').textContent = "Pytania: " + ile + "/216";
     document.getElementById('taskCounter').style.display = 'block';
 
     // musimy tez ukryc obecne zdjecie z pytaniem
@@ -260,7 +269,7 @@ function selectAnswer(answer) {
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
         circle.style.backgroundColor = "#FFFFFF";
-        circle.style.opacity = "33%";
+        circle.style.opacity = "100%";
         circle.style.cursor = 'pointer';
     });
 }
@@ -306,7 +315,7 @@ function nextScenario() {
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
         circle.style.backgroundColor = scenario[2];
-        circle.style.opacity = "33%";
+        circle.style.opacity = "100%";
         circle.style.cursor = 'auto';
     });
 
@@ -336,26 +345,6 @@ function nextScenario() {
 }
 
 // Funkcja mrygajaca losowym kolkiem
-// function blinking(hz) {
-// 	// zatrzymanie starego mrygania
-//     clearInterval(blinkingIntervalId);
-
-// 	const randomDot = dots[Math.floor(Math.random() * dots.length)];
-// 	const elements = document.getElementsByClassName(randomDot);
-// 	selected_dot = elements[0];
-//     console.log(selected_dot);
-//     blinkingIntervalId = setInterval(() => {
-//         //console.timeEnd('myTimer');
-//         //console.time('myTimer');
-//         const originalOpacity = selected_dot.style.opacity;
-//         selected_dot.style.opacity = '100%';
-//         setTimeout(() => {
-//             selected_dot.style.opacity = originalOpacity;  // Przywracamy poprzednia przezroczystosc co jakis czas
-//         }, 200);
-//     }, 1000/hz);
-// }
-
-// Funkcja mrygajaca losowym kolkiem
 function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
     // zatrzymanie starego mrygania
     clearInterval(blinkingIntervalId);
@@ -366,10 +355,10 @@ function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
     blinkingTimeoutId = setTimeout(() => {
         let licznik = 0;
         blinkingIntervalId = setInterval(() => {
-            if (selectedDot.style.opacity == 0.33) {
-                selectedDot.style.opacity = '100%';
+            if (selectedDot.style.opacity == 1.0) {
+                selectedDot.style.opacity = '0%';
             } else {
-                selectedDot.style.opacity = '33%';
+                selectedDot.style.opacity = '100%';
             }
             
             licznik++;
