@@ -114,8 +114,8 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
     experimentData.startTime = new Date();
 
     // zapis do pliku inforamcji o uzytkowniku i czasie startu
-    saveLine("dots.xlsx", "===");
-    saveLine("dots.xlsx", user + " " + experimentData.startTime.toISOString() + " " + Date.now());
+    // saveLine("dots.xlsx", "===");
+    // saveLine("dots.xlsx", user + " " + experimentData.startTime.toISOString() + " " + Date.now());
 
     // Znajdujemy kontener z okręgiem
     var container = document.getElementById('container');
@@ -152,10 +152,10 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const line_elements = [scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp];
+    const line_elements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp];
     line = line_elements.join(" ");
-    saveLine("dots.xlsx", line);
-    saveLine("results.xlsx", user + " " + line)
+    //saveLine("dots.xlsx", line);
+    saveLine("results.xlsx", line)
 
     //wystartowanie nastepnego scenraiusza
     task_counter += 1;
@@ -212,10 +212,10 @@ function saveDotSelection(nr) {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const line_elements = [scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp];
+    const line_elements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp];
     line = line_elements.join(" ");
-    saveLine("dots.xlsx", line);
-    saveLine("results.xlsx", user + " " + line)
+    //saveLine("dots.xlsx", line);
+    saveLine("results.xlsx", line)
 
     // Jeśli użytkownik dobrze odpowiedział, trzeba sprawdzić czy nie ma wyższych kontrastów
     // które należy usunać z listy scenariuszy 
@@ -284,9 +284,9 @@ function nextScenario() {
         czas_trwania = ((experimentData.endTime - experimentData.startTime) / 1000).toString();
         // zapis do pliku inforamcji o czasie zakonczenia i dlugosci eksp
 
-        saveLine("dots.xlsx", user + " " + experimentData.endTime.toISOString() + " " + Date.now());
-        saveLine("dots.xlsx", "Czas trwania: " + czas_trwania);
-        saveLine("dots.xlsx", "===");
+        // saveLine("dots.xlsx", user + " " + experimentData.endTime.toISOString() + " " + Date.now());
+        // saveLine("dots.xlsx", "Czas trwania: " + czas_trwania);
+        // saveLine("dots.xlsx", "===");
 
         // Znajdujemy kontener z okręgiem
         var container = document.getElementById('container');
