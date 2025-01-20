@@ -1,264 +1,264 @@
 Pytanie 1: Ile jest kwiatów na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 2: Ile jest kredek na obrazku?
-Odpowiedz: 6
+Odpowiedź: 6
 
 Pytanie 3: Ile jest gęsi na obrazku?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 4: Ile jest kredek na obrazku?
-Odpowiedz: 13
+Odpowiedź: 13
 
 Pytanie 5: Ile jest przedmiotów na obrazku?
-Odpowiedz: 11
+Odpowiedź: 11
 
 Pytanie 6: Ile osób jest na obrazku?
-Odpowiedz: 9
+Odpowiedź: 9
 
 Pytanie 7: Ile jest skrzydeł na obrazku?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 8: Ile widzisz gwiazd?
-Odpowiedz: 6 - zmienic obrazek na 5
+Odpowiedź: 6 - zmienic obrazek na 5
 
 Pytanie 9: Ile jest czerwonych okienek?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 10: Z ilu kul składa się bałwan?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 11: Ile jest czerwonych nakrętek?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 12: Ile jest psów na obrazku?
-Odpowiedz: 15
+Odpowiedź: 15
 
 Pytanie 13: Ile jest babeczek na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 14: Ile jest żółtych książek na obrazku?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 15: Ile jest białych kropek na obrazku?
-Odpowiedz: 22
+Odpowiedź: 22
 
 Pytanie 16: Ile jest kwiatów na kaktusach?
-Odpowiedz: 6
+Odpowiedź: 6
 
 Pytanie 17: Ile warstw ma arbuz na obrazku? ??????????????
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 18: Ile jest czerwonych lampek?
-Odpowiedz: 6
+Odpowiedź: 6
 
 Pytanie 19: Ile jest niebieskich kwiatów?
-Odpowiedz: 0
+Odpowiedź: 0
 
 Pytanie 20: Ile jest ambulansów na obrazku?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 21: Ile jest minek z językiem na wierzchu?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 22: Ile jest biedronek na obrazku?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 23: Ile ptaków leci w prawo na obrazku?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 24: Ile jest czerwonych figur na obrazku?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 25: Ile jest talerzy na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 26: Ile jest oczek na górze kostki?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 27: Ile jest czerwonych kropek na kokardzie?
-Odpowiedz: 6
+Odpowiedź: 6
 
 Pytanie 28: Ile jest misek na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 29: Ile jest żółtych owoców na obrazku?
-Odpowiedz: 8
+Odpowiedź: 8
 
 Pytanie 30: Ile jest krów na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 31: Ile jest zielonych aut na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 32: Ile jest serc na obrazku?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 33: Ile jest monet na środkowej stercie?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 34: Ile jest czerwonych pól?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 35: Ile jest drzew na obrazku?
-Odpowiedz: 9
+Odpowiedź: 9
 
 Pytanie 36: Ile jest chmur na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 37: Ile jest owoców na obrazku?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 38: Ile jest noży na obrazku?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 39: Ile jest pięcioramiennych gwiazd?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 40: Ile jest czerwonych przedmiotów?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 41: Ile jest kawałków sera na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Pytanie 42: Ile jest ludzi na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 43: Ile jest obiektów z pomarańczowym elementem?
-Odpowiedz: 8
+Odpowiedź: 8
 
 Pytanie 44: Ile jest łącznie listków na wiśniach?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 45: Ile jest kartek na prawej stercie?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 46: Ile jest psów na obrazku?
-Odpowiedz: 8
+Odpowiedź: 8
 
 Pytanie 47: Ile jest znaków z ludźmi?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 48: Ile jest czerwonych książek?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 49: Ile jest oczek na fioletowej kostce?
-Odpowiedz: 14
+Odpowiedź: 14
 
 Pytanie 50: Ile jest marchewek na obrazku?
-Odpowiedz: 1
+Odpowiedź: 1
 
 Brak polskich znakow:
 Pytanie 51: Ile jest bananów na obrazku?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 52: Ile jest plastrów salami na pizzy?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 53: Ile trójkąt ma boków?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 54: Ile jest poczków na obrazku? - Dodac 1
-Odpowiedz: 7
+Odpowiedź: 7
 
 Pytanie 55: Ile jest dzieci na obrazku?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 56: Ile jest pasków na kręglach?
-Odpowiedz: 10
+Odpowiedź: 10
 
 Pytanie 57: Ile widzisz białych pasków na opakowaniu popcornu?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 58: Ile psów na odsłonięte oczy?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 59: Ile czarnych łat ma krowa?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 60: Ile jest niebieskich aplak na obrazku?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 61: Ile jest cięzarówek na obrazku?
-Odpowiedz: 6
+Odpowiedź: 6
 
 Pytanie 62: Ile owiec jest przodem na obrazku?
-Odpowiedz: 3
+Odpowiedź: 3
 
 Pytanie 63: Ile osób ma prosto nogi na obrazku?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 64: Ile aut jedzie w lewo?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 65: Ile jest aparatów na obrazku?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 66: Ile paluszków jest wbite w lody?
-Odpowiedz: 8
+Odpowiedź: 8
 
 Pytanie 67: Ile jest balonów na obrazku?
-Odpowiedz: 7
+Odpowiedź: 7
 
 Pytanie 68: Ile jest balonów jest ze sobą zwiazanych?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 69: Ile jest balonów na obrazku?
-Odpowiedz: 10
+Odpowiedź: 10
 
 Pytanie 70: Ile jest bombek na obrazku?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 71: Ile jest czworonogich dinozaurów?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 72: Ile jest dłoni jest skierowanych w góre?
-Odpowiedz:  2
+Odpowiedź:  2
 
 Pytanie 73: Ile jest drzew iglastych na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 74: Ile flamingów jest ustawionych w prawo?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 75: Ile jest bagietek na obrazku? - usunac 1
-Odpowiedz: 3 
+Odpowiedź: 3 
 
 Pytanie 76: Ile  jest gwiazdek na bombce?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 77: Ile jest kwiatów na kaktusach?
-Odpowiedz: 8
+Odpowiedź: 8
 
 Pytanie 78: Ile jest żółtych ksiązek na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 79: Ile jest liści na obrazku?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 80: Ile jest spinaczy na obrazku?
-Odpowiedz: 5
+Odpowiedź: 5
 
 Pytanie 81: Ile jest cytryn na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 82: Ile jest niepokolorowanych obrazów?
-Odpowiedz: 12
+Odpowiedź: 12
 
 Pytanie 83: Ile jest kwiatów na obrazku?
-Odpowiedz: 7
+Odpowiedź: 7
 
 Pytanie 84: Ile koala ma oczu?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 85: Ile jest lodow na patyku?
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 86: Ile monet jest na obrazku? - dodac 1
-Odpowiedz: 4
+Odpowiedź: 4
 
 Pytanie 87: Ile jest limonek na obrazku?
-Odpowiedz: 2
+Odpowiedź: 2
 
 Pytanie 88: Ile cyfr widzisz na obrazku?
-Odpowiedz: 4
+Odpowiedź: 4
