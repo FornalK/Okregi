@@ -19,6 +19,7 @@
   "homepage": "https://github.com/FornalK/Okregi#readme",
   "dependencies": {
     "express": "^4.21.1",
+    "okregi": "file:",
     "xlsx": "^0.18.5"
   }
 }

@@ -46,7 +46,7 @@ Odpowiedź: 22
 Pytanie 16: Ile jest kwiatów na kaktusach?
 Odpowiedź: 6
 
-Pytanie 17: Ile warstw ma arbuz na obrazku? ??????????????
+Pytanie 17: Ile warstw ma arbuz na obrazku?
 Odpowiedź: 3
 
 Pytanie 18: Ile jest czerwonych lampek?
