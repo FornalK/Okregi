@@ -2,9 +2,13 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const xlsx = require('xlsx');
+const http = require('http');
+const WebSocket = require('ws');
 
 const app = express();
 const PORT = 3000;
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
 // Middleware do parsowania JSON
 app.use(express.json());
@@ -64,7 +68,25 @@ app.post('/save-data', (req, res) => {
     }
 });
 
+// Obsługa WebSocket (nasłuchiwanie wiadomości od Pythona)
+wss.on('connection', (ws) => {
+    console.log('Nowe połączenie WebSocket');
+
+    ws.on('message', (message) => {
+        console.log('Otrzymano wiadomość od Pythona:', message.toString());
+
+        // Wysyłamy wiadomość do wszystkich podłączonych klientów (np. main.js)
+        wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message.toString());
+            }
+        });
+    });
+
+    ws.on('close', () => console.log('Klient WebSocket rozłączony'));
+});
+
 // Uruchom serwer
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Serwer działa na http://localhost:${PORT}`);
 });

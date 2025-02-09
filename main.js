@@ -371,4 +371,22 @@ function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
 
 // Znajdujemy przycisk "DALEJ" i zalaczamy metode do przechodzenia po kolejnych scenariuszach
 const nextScenarioBtn = document.getElementById('nextScenarioBtn');
-// nextScenarioBtn.onclick = nextScenario;
+
+// obsługa danych ze skryptu pythona
+const socket = new WebSocket('ws://localhost:3000');
+
+socket.onopen = () => {
+    console.log('Połączono z serwerem WebSocket');
+};
+
+socket.onmessage = (event) => {
+    console.log('Otrzymana wiadomość:', event.data);
+};
+
+socket.onerror = (error) => {
+    console.error('Błąd WebSocket:', error);
+};
+
+socket.onclose = () => {
+    console.log('Połączenie WebSocket zamknięte');
+};
