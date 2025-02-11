@@ -228,7 +228,6 @@ function saveDotSelection(nr) {
                 scenarios.splice(i, 1);
             }
         }
-
     }
 
     //wystartowanie nastepnego scenraiusza
@@ -238,28 +237,55 @@ function saveDotSelection(nr) {
 }
 
 function selectAnswer(answer) {
-    timeSpentOnTask = (Date.now() - timeSpentOnTask) / 1000;
-    console.log(timeSpentOnTask);
+    // ukrycie odpowiedzi
     document.getElementById('answers').style.display = 'none';
 
+    // musimy tez ukryc obecne zdjecie z pytaniem
+    document.getElementById('questionImage').style.display = 'none';
+
+    // sprawdzamy ile czasu ktoś poświęcił na zadanie od jego pojawienia się
+    timeSpentOnTask = (Date.now() - timeSpentOnTask) / 1000;
+    // jeśli ktoś poświęcił zbyt mało czasu na zadanie
+    // poniżej 4 sekundy traktujemy, że przeklikał od niechcenia
+    if (timeSpentOnTask < 4) {
+        // zatrzymanie mrygania
+        clearInterval(blinkingIntervalId); 
+        clearTimeout(blinkingTimeoutId);
+
+        // informujemy, że użytkownik działa za szybko
+        document.getElementById('tooFast').style.display = 'block';
+
+        // wtedy dajemy kolejne zadanie bez możliwości wyboru co mrygało
+        setTimeout(() => {
+            // zresetowanie ustawien elementow html
+            document.getElementById('tooFast').style.display = 'none';
+            // Ustawia wyglad kropek oraz nasluchiwanie na klikniecie
+            var circles = document.querySelectorAll('.circle');
+            circles.forEach(circle => {
+                circle.style.backgroundColor = "#FFFFFF";
+                circle.style.opacity = "100%";
+                circle.style.cursor = 'pointer';
+            });
+
+            // nastepny scenariusz
+            nextScenario();
+        }, 4000);
+        return;
+    } 
+        
     // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
+
     document.getElementById('didntBlinkText').style.display = 'block';
     document.getElementById('didntBlinkBtn').style.display = 'block';
     
     // Wyswietlamy tez informacje ile na ile scenariuszy zrealizowano
     document.getElementById('taskCounter').style.display = 'block';
 
-    // musimy tez ukryc obecne zdjecie z pytaniem
-    document.getElementById('questionImage').style.display = 'none';
-
-    // oraz wlaczyc wszystkie kropki zeby uzytkownik mogl w nie kliknac
-    // zaznaczajac ktora mrygała
-
     // zatrzymanie starego mrygania gdyby jeszcze trwalo
     clearInterval(blinkingIntervalId); 
     clearTimeout(blinkingTimeoutId);
 
-    // Ustawia wyglad kolek oraz nasluchiwanie na klikniecie
+    // Ustawia wyglad kropek oraz nasluchiwanie na klikniecie
     var circles = document.querySelectorAll('.circle');
     circles.forEach(circle => {
         circle.style.backgroundColor = "#FFFFFF";
@@ -289,6 +315,13 @@ function nextScenario() {
         container.style.display = 'none';
 
         return
+    }
+
+    // przypadek gdy ktoś za szybko odpowiada na pytania (nierzetelnie)
+    if (timeSpentOnTask < 4) {
+        // musimy wrzucić poprzednio ściągnięty scenariusz spowrotem na listę i ją przetasować
+        scenarios.push(scenario);
+        shuffleTab(scenarios);
     }
 
     // Kolejnym scenariuszem jest zawsze ostatni element z tablicy scenariuszy
@@ -335,6 +368,7 @@ function nextScenario() {
     runBlinking(delay, interval, reps, dotNr);
 
     showNextQuestion();
+    console.log(scenarios.length);
     timeSpentOnTask = Date.now();
 }
 

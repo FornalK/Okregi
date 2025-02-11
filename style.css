@@ -156,6 +156,17 @@ body {
 	transform: translateX(-50%);
 }
 
+#tooFast {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+    font-size: 28px;
+    width: 300px;
+}
+
 #didntBlinkText{
     padding: 20px 20px;
     font-size: 16px;
