@@ -4,7 +4,7 @@ const dots = [
 	"topLeft", "topRight", "bottomLeft", "bottomRight"
 ];
 
-const scenarios_template = [
+const scenariosTemplate = [
     ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 1],
     ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 1],
     ["ringBig", "ringContrast1", "#7b00ff", "2px", "154px", 1],
@@ -40,7 +40,7 @@ let scenarios = [];
 // Dodanie dla każdego scenariusza numeru kropki, czyli zrobienie 27 * 8 scenariuszy
 for (let i = 0; i < dots.length; i++) {
     // kopia tablicy scenarios
-    let new27ScenariosPerDot = structuredClone(scenarios_template);
+    let new27ScenariosPerDot = structuredClone(scenariosTemplate);
     // Dodanie w kopii numeru kropki
     for (let lista of new27ScenariosPerDot) {
         lista.push(i);
@@ -66,11 +66,11 @@ shuffleTab(scenarios);
 
 let user;
 let scenario;
-let task_counter = 0;
-let number_of_tasks = 216;
+let taskCounter = 0;
+let numberOfTasks = 216;
 let blinkingIntervalId;
 let blinkingTimeoutId;
-//console.time('myTimer')
+let timeSpentOnTask;
 let selectedDot;
 let highlightedDots = [];
 let answeredQuestions = [];
@@ -152,13 +152,13 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const line_elements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp];
-    line = line_elements.join(" ");
+    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp];
+    line = lineElements.join(" ");
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
 
     //wystartowanie nastepnego scenraiusza
-    task_counter += 1;
+    taskCounter += 1;
     progressBarUpdate()
     nextScenario();
 
@@ -168,7 +168,7 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
 function progressBarUpdate() {
     const progressBar = document.getElementById("progress-bar");
     // Aktualizuj szerokość paska postępu
-    const progressPercentage = ((number_of_tasks - scenarios.length) / number_of_tasks) * 100;
+    const progressPercentage = ((numberOfTasks - scenarios.length) / numberOfTasks) * 100;
     progressBar.style.width = `${progressPercentage}%`;
 };
 
@@ -212,8 +212,8 @@ function saveDotSelection(nr) {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const line_elements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp];
-    line = line_elements.join(" ");
+    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp];
+    line = lineElements.join(" ");
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
 
@@ -232,20 +232,14 @@ function saveDotSelection(nr) {
     }
 
     //wystartowanie nastepnego scenraiusza
-    task_counter += 1;
+    taskCounter += 1;
     progressBarUpdate()
     nextScenario();
 }
 
 function selectAnswer(answer) {
-    // const isCorrect = checkAnswer(answer); // Funkcja do sprawdzania poprawności odpowiedzi
-    const isCorrect = true;
-    answeredQuestions.push({ 
-        questionNumber: answeredQuestions.length + 1, 
-        answer, 
-        isCorrect 
-    });
-    answeredQuestions.push({ questionNumber: answeredQuestions.length + 1, answer });
+    timeSpentOnTask = (Date.now() - timeSpentOnTask) / 1000;
+    console.log(timeSpentOnTask);
     document.getElementById('answers').style.display = 'none';
 
     // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
@@ -281,11 +275,11 @@ function nextScenario() {
 
         // Zapis czasu rozpoczęcia i zakończenia eksperymentu
         experimentData.endTime = new Date()
-        czas_trwania = ((experimentData.endTime - experimentData.startTime) / 1000).toString();
+        duration = ((experimentData.endTime - experimentData.startTime) / 1000).toString();
         // zapis do pliku inforamcji o czasie zakonczenia i dlugosci eksp
 
         // saveLine("dots.xlsx", user + " " + experimentData.endTime.toISOString() + " " + Date.now());
-        // saveLine("dots.xlsx", "Czas trwania: " + czas_trwania);
+        // saveLine("dots.xlsx", "Czas trwania: " + duration);
         // saveLine("dots.xlsx", "===");
 
         // Znajdujemy kontener z okręgiem
@@ -298,14 +292,14 @@ function nextScenario() {
     }
 
     // Kolejnym scenariuszem jest zawsze ostatni element z tablicy scenariuszy
-    prev_scenario = scenario;
+    prevScenario = scenario;
     scenario = scenarios.pop()
 
     // Ustawia klas dla okręgu
     var ring = document.getElementById('ring');
-    if (task_counter > 0) {
-        ring.classList.remove(prev_scenario[0]);
-        ring.classList.remove(prev_scenario[1]);
+    if (taskCounter > 0) {
+        ring.classList.remove(prevScenario[0]);
+        ring.classList.remove(prevScenario[1]);
     }
 
     ring.classList.add(scenario[0]);
@@ -334,14 +328,14 @@ function nextScenario() {
     circles[7].style.right = scenario[4];
     
     // Uruchomienie funkcji która ma mrygać
-	//blinking(scenarios[scenario][5]);
     delay = Math.random() * 1500 + 1500; // opoznienie od 1.5 do 3 sekund
     interval = 1000 / scenario[5]; // ile razy na sekunde mryganie
     reps = 4 * scenario[5];
     dotNr = scenario[6];
     runBlinking(delay, interval, reps, dotNr);
 
-    showNextQuestion()
+    showNextQuestion();
+    timeSpentOnTask = Date.now();
 }
 
 // Funkcja mrygajaca losowym kolkiem
