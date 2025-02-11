@@ -2,11 +2,11 @@
 
 https://okregi.onrender.com/
 
-## Wytyczne
+## TODO
 
-https://docs.google.com/document/d/1jLaj8MqPgw0HORaKeo7myivgAZlotr8Q/edit
+https://docs.google.com/document/d/1F272xPllLXsi4EVXu3RCIa8SEhAAQbSMAZRICYWLBc4/edit?usp=sharing
 
-## Uruchomienie:
+## Uruchomienie lokalnie:
 
 Zainstaluj node.js
 Będąc w folderze z projektem uruchom komendę: 
