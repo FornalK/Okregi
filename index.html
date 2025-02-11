@@ -14,7 +14,7 @@
     <div id="container" style="display:none;">
         <div id="ring">
             <div id="questionContainer">
-                <img id="questionImage" src="" alt="Pytanie">
+                <img id="questionImage" style="display:none;" src="" alt="Pytanie">
             </div>
             <div id="answers" style="display:none;">
                 <img id="answerA" src="" alt="Odpowiedź A" onclick="selectAnswer('A')">
@@ -39,11 +39,17 @@
         </div>
     </div>
     <div id="didntBlink">
-        <div id="didntBlinkText" style="display:none;">Zaznacz kropke, która mrygała:</button>
+        <div id="didntBlinkText" style="display:none;">Zaznacz kropke, która mrygała:</div>
         <button id="didntBlinkBtn" style="display:none;">ŻADNA NIE MRYGAŁA</button>
     </div>
     <div id="tooFast" style="display:none;">
         Działasz zbyt szybko! Odpowiadaj na pytania rzetelnie! :)
+    </div>
+    <div id="centering" style="display:none;">
+        <p>Umieść wzrok w obrębie</p>
+        <p>kwadrata poniżej,</p> 
+        <p>aby kontynuować</p>
+        <div id="centeringSquare"></div>
     </div>
     <script src="main.js"></script>
 </body>

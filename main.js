@@ -67,11 +67,13 @@ shuffleTab(scenarios);
 let user;
 let scenario;
 let taskCounter = 0;
-let numberOfTasks = 216;
 let blinkingIntervalId;
 let blinkingTimeoutId;
 let timeSpentOnTask;
 let selectedDot;
+let rightEyeGaze;
+let leftEyeGaze;
+let numberOfTasks = 216;
 let highlightedDots = [];
 let answeredQuestions = [];
 let answeredDots = [];
@@ -137,7 +139,7 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
     });
     
     // Wystartowanie z pierwszym scenariuszem
-    nextScenario();
+    gazeToCenter();
 });
 
 // Podpięcie funkcji anonimowej, pod przycisk, że nic nie mrygało
@@ -160,7 +162,7 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     //wystartowanie nastepnego scenraiusza
     taskCounter += 1;
     progressBarUpdate()
-    nextScenario();
+    gazeToCenter();
 
 });
 
@@ -233,7 +235,7 @@ function saveDotSelection(nr) {
     //wystartowanie nastepnego scenraiusza
     taskCounter += 1;
     progressBarUpdate()
-    nextScenario();
+    gazeToCenter();
 }
 
 function selectAnswer(answer) {
@@ -268,13 +270,12 @@ function selectAnswer(answer) {
             });
 
             // nastepny scenariusz
-            nextScenario();
+            gazeToCenter();
         }, 4000);
         return;
     } 
         
     // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
-
     document.getElementById('didntBlinkText').style.display = 'block';
     document.getElementById('didntBlinkBtn').style.display = 'block';
     
@@ -294,6 +295,21 @@ function selectAnswer(answer) {
     });
 }
 
+// Funkcja wymuszająca na użytkowniku skierowanie wzroku do centrum okręgu
+function gazeToCenter() {
+    // Pokazanie napisu z polecenim i centralnym kwadratem
+    document.getElementById('centering').style.display = 'block';
+
+    // Uruchomienie funkcji anonimowej, która sprawdza co 100 ms czy wzrok jest w obszarze kwadratu
+    // jeśli tak to mozemy wyświetlić następny scenariusz i zakończyć sprawdzanie
+    let intervalId = setInterval(() => {
+        if (leftEyeGaze > 1 && rightEyeGaze > 1) {
+            document.getElementById('centering').style.display = 'none';
+            nextScenario();
+            clearInterval(intervalId); // Zatrzymanie interwału
+        }
+    }, 2000);
+}
 
 // Funkcja przechodzaca do kolejnego scenariusza
 function nextScenario() {
@@ -408,7 +424,9 @@ socket.onopen = () => {
 };
 
 socket.onmessage = (event) => {
-    console.log('Otrzymana wiadomość:', event.data);
+    let message = JSON.parse(event.data).split(" ");
+    leftEyeGaze = parseInt(message[0]);
+    rightEyeGaze = parseInt(message[1]);
 };
 
 socket.onerror = (error) => {
