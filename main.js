@@ -71,8 +71,8 @@ let blinkingIntervalId;
 let blinkingTimeoutId;
 let timeSpentOnTask;
 let selectedDot;
-let rightEyeGaze;
-let leftEyeGaze;
+let rightEyeGaze = 2;
+let leftEyeGaze = 2;
 let numberOfTasks = 216;
 let highlightedDots = [];
 let answeredQuestions = [];
@@ -186,17 +186,17 @@ function showNextQuestion() {
     const questionNumber = Math.floor(Math.random() * 128) + 1;
     let questionImg = document.getElementById('questionImage');
     questionImg.style.display = 'inline';
-    questionImg.src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}.png`;
+    questionImg.src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}.png`;
     
     displayAnswers(questionNumber);
 }
 
 function displayAnswers(questionNumber) {
     document.getElementById('answers').style.display = 'flex';
-    document.getElementById('answerA').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_A.png`;
-    document.getElementById('answerB').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_B.png`;
-    document.getElementById('answerC').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_C.png`;
-    document.getElementById('answerD').src = `images/ciekawostka_${String(questionNumber).padStart(3, '0')}_D.png`;
+    document.getElementById('answerA').src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}_A.png`;
+    document.getElementById('answerB').src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}_B.png`;
+    document.getElementById('answerC').src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}_C.png`;
+    document.getElementById('answerD').src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}_D.png`;
 }
 
 function saveDotSelection(nr) {
