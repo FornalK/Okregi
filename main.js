@@ -66,11 +66,13 @@ shuffleTab(scenarios);
 
 let user;
 let scenario;
-let taskCounter = 0;
 let blinkingIntervalId;
 let blinkingTimeoutId;
 let timeSpentOnTask;
 let selectedDot;
+let currentQuestionNumber;
+let currentUserAnswer;
+let taskCounter = 0;
 let rightEyeGaze = 2;
 let leftEyeGaze = 2;
 let numberOfTasks = 216;
@@ -154,7 +156,7 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp];
+    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp, currentQuestionNumber, currentUserAnswer];
     line = lineElements.join(" ");
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
@@ -178,16 +180,16 @@ function progressBarUpdate() {
 function getRandomQuestion() {
     const randomIndex = Math.floor(Math.random() * availableQuestions.length);
     const questionNumber = availableQuestions[randomIndex];
+    currentQuestionNumber = questionNumber;
     availableQuestions.splice(randomIndex, 1); // Usuń użyte pytanie
-    return questionNumber;
+    return questionNumber + 1 // + 1 bo indeksujemy od zera a numery pytań w plikach są od 1;
 }
 
 function showNextQuestion() {
-    const questionNumber = Math.floor(Math.random() * 128) + 1;
+    const questionNumber = getRandomQuestion();
     let questionImg = document.getElementById('questionImage');
     questionImg.style.display = 'inline';
     questionImg.src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}.png`;
-    
     displayAnswers(questionNumber);
 }
 
@@ -214,7 +216,7 @@ function saveDotSelection(nr) {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp];
+    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp, currentQuestionNumber, currentUserAnswer];
     line = lineElements.join(" ");
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
@@ -239,6 +241,8 @@ function saveDotSelection(nr) {
 }
 
 function selectAnswer(answer) {
+    // zapisanie wybranej odpowiedzi
+    currentUserAnswer = answer;
     // ukrycie odpowiedzi
     document.getElementById('answers').style.display = 'none';
 
@@ -338,6 +342,9 @@ function nextScenario() {
         // musimy wrzucić poprzednio ściągnięty scenariusz spowrotem na listę i ją przetasować
         scenarios.push(scenario);
         shuffleTab(scenarios);
+
+        // przeklikane pytanie też spowrotem wrzucamy na listę możliwych pytań
+        availableQuestions.push(currentQuestionNumber);
     }
 
     // Kolejnym scenariuszem jest zawsze ostatni element z tablicy scenariuszy
@@ -384,7 +391,6 @@ function nextScenario() {
     runBlinking(delay, interval, reps, dotNr);
 
     showNextQuestion();
-    console.log(scenarios.length);
     timeSpentOnTask = Date.now();
 }
 

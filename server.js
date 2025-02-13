@@ -16,6 +16,16 @@ app.use(express.json());
 // Serwowanie plików statycznych (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname)));
 
+// Wczytanie pliku z odpowiedziami
+let answersList = [];
+fs.readFile('answers.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error('Błąd odczytu pliku:', err);
+        return;
+    }
+    answersList = data.split('\n').map(litera => litera.trim()).filter(litera => litera !== '');
+});
+
 // Funkcja do zapisu danych do pliku Excel
 function saveToExcel(filePath, rowData) {
     let workbook;
@@ -38,8 +48,16 @@ function saveToExcel(filePath, rowData) {
     // Rozdziel tekst w "line" na tablicę i dodaj jako nowy wiersz
     const newRow = rowData.split(' ');  // Rozdzielanie tekstu według spacji na tablicę
 
+    // sprawdzenie czy uzytkownik odpowiedział poprawnie
+    if (answersList[parseInt(newRow[7])] == newRow[8])
+    {
+        newRow[7] = 1;
+    } else {
+        newRow[7] = 0;
+    }
+
     // Dodaj nowy wiersz danych
-    existingData.push(newRow);
+    existingData.push(newRow.slice(0, 8));
 
     // Zaktualizuj arkusz w workbook
     const updatedWorksheet = xlsx.utils.aoa_to_sheet(existingData);
