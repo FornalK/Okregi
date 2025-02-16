@@ -26,7 +26,6 @@ fs.readFile('answers.txt', 'utf8', (err, data) => {
     answersList = data.split('\n').map(litera => litera.trim()).filter(litera => litera !== '');
 });
 
-// Funkcja do zapisu danych do pliku Excel
 function saveToExcel(filePath, rowData) {
     let workbook;
     let worksheet;
@@ -42,11 +41,23 @@ function saveToExcel(filePath, rowData) {
         workbook.Sheets['Sheet1'] = worksheet;
     }
 
-    // Pobierz istniejące dane z arkusza (jeśli są)
-    const existingData = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+    // Pobierz wszystkie klucze komórek, np. 'A1', 'B2' itp.
+    const cellKeys = Object.keys(worksheet);
+    let maxRow = 0;
+
+    // Znajdź najwyższy używany wiersz (ignorujemy nagłówki i metadane)
+    cellKeys.forEach(cell => {
+        const match = cell.match(/^([A-Z]+)(\d+)$/); // Dopasowanie komórek np. A1, B2
+        if (match) {
+            maxRow = Math.max(maxRow, parseInt(match[2]));
+        }
+    });
+
+    // Znaleziony pierwszy pusty wiersz
+    const newRowIndex = maxRow + 1;
 
     // Rozdziel tekst w "line" na tablicę i dodaj jako nowy wiersz
-    const newRow = rowData.split(' ');  // Rozdzielanie tekstu według spacji na tablicę
+    let newRow = rowData.split(' ');  // Rozdzielanie tekstu według spacji na tablicę
 
     // sprawdzenie czy uzytkownik odpowiedział poprawnie
     if (answersList[parseInt(newRow[8])] == newRow[9])
@@ -56,12 +67,19 @@ function saveToExcel(filePath, rowData) {
         newRow[8] = 0;
     }
 
-    // Dodaj nowy wiersz danych
-    existingData.push(newRow.slice(0, 9));
+    
+    newRow = newRow.slice(0, 9);
 
-    // Zaktualizuj arkusz w workbook
-    const updatedWorksheet = xlsx.utils.aoa_to_sheet(existingData);
-    workbook.Sheets['Sheet1'] = updatedWorksheet;
+    // Wstaw nową linię do arkusza
+    newRow.forEach((value, colIndex) => {
+        const cellRef = xlsx.utils.encode_cell({ r: newRowIndex - 1, c: colIndex }); // Zamiana na np. 'A3'
+        worksheet[cellRef] = { t: 's', v: value }; // Ustawienie wartości
+    });
+
+    // Zaktualizuj zakres arkusza
+    const range = xlsx.utils.decode_range(worksheet['!ref'] || "A1:A1");
+    range.e.r = newRowIndex - 1;
+    worksheet['!ref'] = xlsx.utils.encode_range(range);
 
     // Zapisz workbook do pliku
     xlsx.writeFile(workbook, filePath);
