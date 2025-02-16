@@ -49,15 +49,15 @@ function saveToExcel(filePath, rowData) {
     const newRow = rowData.split(' ');  // Rozdzielanie tekstu według spacji na tablicę
 
     // sprawdzenie czy uzytkownik odpowiedział poprawnie
-    if (answersList[parseInt(newRow[7])] == newRow[8])
+    if (answersList[parseInt(newRow[8])] == newRow[9])
     {
-        newRow[7] = 1;
+        newRow[8] = 1;
     } else {
-        newRow[7] = 0;
+        newRow[8] = 0;
     }
 
     // Dodaj nowy wiersz danych
-    existingData.push(newRow.slice(0, 8));
+    existingData.push(newRow.slice(0, 9));
 
     // Zaktualizuj arkusz w workbook
     const updatedWorksheet = xlsx.utils.aoa_to_sheet(existingData);

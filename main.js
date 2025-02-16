@@ -72,6 +72,7 @@ let timeSpentOnTask;
 let selectedDot;
 let currentQuestionNumber;
 let currentUserAnswer;
+let startTimestampSelectDot;
 let taskCounter = 0;
 let rightEyeGaze = 2;
 let leftEyeGaze = 2;
@@ -156,7 +157,7 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', timestamp, currentQuestionNumber, currentUserAnswer];
+    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', startTimestampSelectDot, timestamp, currentQuestionNumber, currentUserAnswer];
     line = lineElements.join(" ");
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
@@ -216,7 +217,7 @@ function saveDotSelection(nr) {
     let timestamp = Date.now()
 
     //zapis do pliku xlsx
-    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, timestamp, currentQuestionNumber, currentUserAnswer];
+    const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, startTimestampSelectDot,  timestamp, currentQuestionNumber, currentUserAnswer];
     line = lineElements.join(" ");
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
@@ -278,6 +279,9 @@ function selectAnswer(answer) {
         }, 4000);
         return;
     } 
+
+    // zapisanie w zmiennej czasu pojawienia się ekranu z wyborem kropek
+    startTimestampSelectDot = Date.now()
         
     // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
     document.getElementById('didntBlinkText').style.display = 'block';
