@@ -73,6 +73,7 @@ let selectedDot;
 let currentQuestionNumber;
 let currentUserAnswer;
 let startTimestampSelectDot;
+let state = 0; // 0 - ekran startowy, 1 - zadanie, 2 - wybor kropki, 3 - centrowanie
 let taskCounter = 0;
 let rightEyeGaze = 2;
 let leftEyeGaze = 2;
@@ -142,7 +143,7 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
     });
     
     // Wystartowanie z pierwszym scenariuszem
-    gazeToCenter();
+    gazeToCenter(true);
 });
 
 // Podpięcie funkcji anonimowej, pod przycisk, że nic nie mrygało
@@ -162,10 +163,10 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     //saveLine("dots.xlsx", line);
     saveLine("results.xlsx", line)
 
-    //wystartowanie nastepnego scenraiusza
+    //wystartowanie nastepnego scenariusza
     taskCounter += 1;
     progressBarUpdate()
-    gazeToCenter();
+    gazeToCenter(true);
 
 });
 
@@ -192,6 +193,9 @@ function showNextQuestion() {
     questionImg.style.display = 'inline';
     questionImg.src = `images_proper/ciekawostka_${String(questionNumber).padStart(3, '0')}.png`;
     displayAnswers(questionNumber);
+
+    // zmiana stanu aplikacji na zadanie
+    state = 1;
 }
 
 function displayAnswers(questionNumber) {
@@ -235,10 +239,10 @@ function saveDotSelection(nr) {
         }
     }
 
-    //wystartowanie nastepnego scenraiusza
+    //wystartowanie nastepnego scenariusza
     taskCounter += 1;
     progressBarUpdate()
-    gazeToCenter();
+    gazeToCenter(true);
 }
 
 function selectAnswer(answer) {
@@ -275,7 +279,7 @@ function selectAnswer(answer) {
             });
 
             // nastepny scenariusz
-            gazeToCenter();
+            gazeToCenter(false);
         }, 4000);
         return;
     } 
@@ -301,26 +305,38 @@ function selectAnswer(answer) {
         circle.style.opacity = "100%";
         circle.style.cursor = 'pointer';
     });
+
+    // ustawienie stanu aplikacji na odpowiedź urzytkownika
+    state = 2;
 }
 
 // Funkcja wymuszająca na użytkowniku skierowanie wzroku do centrum okręgu
-function gazeToCenter() {
+function gazeToCenter(isAnswerProper) {
+    // ukrycie odpowiedzi (jesli bylaby widoczna)
+    document.getElementById('answers').style.display = 'none';
+
+    // musimy tez ukryc obecne zdjecie z pytaniem (jesli widoczne)
+    document.getElementById('questionImage').style.display = 'none';
+
     // Pokazanie napisu z polecenim i centralnym kwadratem
     document.getElementById('centering').style.display = 'block';
 
-    // Uruchomienie funkcji anonimowej, która sprawdza co 100 ms czy wzrok jest w obszarze kwadratu
+    // zmiana stanu aplikacji na centrowanie
+    state = 3;
+
+    // Uruchomienie funkcji anonimowej, która sprawdza co 500 ms czy wzrok jest w obszarze kwadratu
     // jeśli tak to mozemy wyświetlić następny scenariusz i zakończyć sprawdzanie
     let intervalId = setInterval(() => {
-        if (leftEyeGaze > 1 && rightEyeGaze > 1) {
+        if (leftEyeGaze == 2 && rightEyeGaze == 2) {
             document.getElementById('centering').style.display = 'none';
-            nextScenario();
+            nextScenario(isAnswerProper);
             clearInterval(intervalId); // Zatrzymanie interwału
         }
-    }, 2000);
+    }, 500);
 }
 
 // Funkcja przechodzaca do kolejnego scenariusza
-function nextScenario() {
+function nextScenario(isProper) {
     if (scenarios.length == 0) {
 
         // Zapis czasu rozpoczęcia i zakończenia eksperymentu
@@ -342,7 +358,8 @@ function nextScenario() {
     }
 
     // przypadek gdy ktoś za szybko odpowiada na pytania (nierzetelnie)
-    if (timeSpentOnTask < 4) {
+    // lub zbłądził wzrokiem od centrum
+    if (isProper == false) {
         // musimy wrzucić poprzednio ściągnięty scenariusz spowrotem na listę i ją przetasować
         scenarios.push(scenario);
         shuffleTab(scenarios);
@@ -446,3 +463,25 @@ socket.onerror = (error) => {
 socket.onclose = () => {
     console.log('Połączenie WebSocket zamknięte');
 };
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === ",") {
+        rightEyeGaze = 2;
+        leftEyeGaze = 2;
+    } else if (event.key === ".") {
+        rightEyeGaze = 1;
+        leftEyeGaze = 1;
+    } else if (event.key === "/") {
+        rightEyeGaze = 0;
+        leftEyeGaze = 0;
+    }
+});
+
+// Sprawdzanie co 500ms czy użytkownik nie opuścił centrum okręgu
+// Jeśli tak to wyświetlalmy ekran z centrowaniem
+setInterval(() => {
+    if (state == 1 && leftEyeGaze == 0 && rightEyeGaze == 0){
+        gazeToCenter(false);
+    }
+}, 500);
+
