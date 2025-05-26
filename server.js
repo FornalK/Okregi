@@ -107,6 +107,22 @@ app.post('/save-data', (req, res) => {
 // Obsługa WebSocket (nasłuchiwanie wiadomości od Pythona)
 wss.on('connection', (ws) => {
     console.log('Nowe połączenie WebSocket');
+    
+    // Ustawienie ping/pong
+    ws.isAlive = true;
+    ws.on('pong', () => { ws.isAlive = true; });
+
+    // Sprawdzaj co jakiś czas, czy połączenie jest aktywne
+    const interval = setInterval(() => {
+        wss.clients.forEach(client => {
+            if (client.isAlive === false) {
+                console.log('Zamykam połączenie z klientem, bo nie odpowiadał na ping.');
+                return client.terminate();
+            }
+            client.isAlive = false;
+            client.ping();
+        });
+    }, 180000); // Ping co 180 sekund
 
     ws.on('message', (message) => {
         console.log('Otrzymano wiadomość od Pythona:', message.toString());

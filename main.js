@@ -5,35 +5,35 @@ const dots = [
 ];
 
 const scenariosTemplate = [
-    ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 1],
-    ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 1],
-    ["ringBig", "ringContrast1", "#7b00ff", "2px", "154px", 1],
-    ["ringSmall", "ringContrast2", "#ff0000", "112px", "232px", 1],
-    ["ringMedium", "ringContrast2", "#ff0000", "57px", "193px", 1],
-    ["ringBig", "ringContrast2", "#ff0000", "2px", "154px",  1],
-    ["ringSmall", "ringContrast3", "#ffff00", "112px", "232px",  1],
-    ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px",  1],
-    ["ringBig", "ringContrast3", "#ffff00", "2px", "154px",  1],
+    ["ringSmall", "ringContrast1", "#7b00ff", "571px", "716px", 1],
+    ["ringMedium", "ringContrast1", "#7b00ff", "287px", "515px", 1],
+    ["ringBig", "ringContrast1", "#7b00ff", "3px", "315px", 1],
+    ["ringSmall", "ringContrast2", "#ff0000", "571px", "716px", 1],
+    ["ringMedium", "ringContrast2", "#ff0000", "287px", "515px", 1],
+    ["ringBig", "ringContrast2", "#ff0000", "3px", "315px", 1],
+    ["ringSmall", "ringContrast3", "#ffff00", "571px", "716px", 1],
+    ["ringMedium", "ringContrast3", "#ffff00", "287px", "515px", 1],
+    ["ringBig", "ringContrast3", "#ffff00", "3px", "315px", 1],
     
-    ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 2],
-    ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 2],
-    ["ringBig", "ringContrast1", "#7b00ff", "2px", "154px", 2],
-    ["ringSmall", "ringContrast2", "#ff0000", "112px", "232px", 2],
-    ["ringMedium", "ringContrast2", "#ff0000", "57px", "193px", 2],
-    ["ringBig", "ringContrast2", "#ff0000", "2px", "154px", 2],
-    ["ringSmall", "ringContrast3", "#ffff00", "112px", "232px", 2],
-    ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px", 2],
-    ["ringBig", "ringContrast3", "#ffff00", "2px", "154px", 2],
+    ["ringSmall", "ringContrast1", "#7b00ff", "571px", "716px", 2],
+    ["ringMedium", "ringContrast1", "#7b00ff", "287px", "515px", 2],
+    ["ringBig", "ringContrast1", "#7b00ff", "3px", "315px", 2],
+    ["ringSmall", "ringContrast2", "#ff0000", "571px", "716px", 2],
+    ["ringMedium", "ringContrast2", "#ff0000", "287px", "515px", 2],
+    ["ringBig", "ringContrast2", "#ff0000", "3px", "315px", 2],
+    ["ringSmall", "ringContrast3", "#ffff00", "571px", "716px", 2],
+    ["ringMedium", "ringContrast3", "#ffff00", "287px", "515px", 2],
+    ["ringBig", "ringContrast3", "#ffff00", "3px", "315px", 2],
 
-    ["ringSmall", "ringContrast1", "#7b00ff", "112px", "232px", 4],
-    ["ringMedium", "ringContrast1", "#7b00ff", "57px", "193px", 4],
-    ["ringBig", "ringContrast1", "#7b00ff", "2px", "154px", 4],
-    ["ringSmall", "ringContrast2", "#ff0000", "112px", "232px", 4],
-    ["ringMedium", "ringContrast2", "#ff0000", "57px", "193px", 4],
-    ["ringBig", "ringContrast2", "#ff0000", "2px", "154px", 4],
-    ["ringSmall", "ringContrast3", "#ffff00", "112px", "232px", 4],
-    ["ringMedium", "ringContrast3", "#ffff00", "57px", "193px", 4],
-    ["ringBig", "ringContrast3", "#ffff00", "2px", "154px", 4],
+    ["ringSmall", "ringContrast1", "#7b00ff", "571px", "716px", 2],
+    ["ringMedium", "ringContrast1", "#7b00ff", "287px", "515px", 2],
+    ["ringBig", "ringContrast1", "#7b00ff", "3px", "315px", 2],
+    ["ringSmall", "ringContrast2", "#ff0000", "571px", "716px", 2],
+    ["ringMedium", "ringContrast2", "#ff0000", "287px", "515px", 2],
+    ["ringBig", "ringContrast2", "#ff0000", "3px", "315px", 2],
+    ["ringSmall", "ringContrast3", "#ffff00", "571px", "716px", 2],
+    ["ringMedium", "ringContrast3", "#ffff00", "287px", "515px", 2],
+    ["ringBig", "ringContrast3", "#ffff00", "3px", "315px", 2],
 ]
 
 let scenarios = [];
@@ -73,7 +73,10 @@ let selectedDot;
 let currentQuestionNumber;
 let currentUserAnswer;
 let startTimestampSelectDot;
+let intervalId1;
+let intervalId2;
 let state = 0; // 0 - ekran startowy, 1 - zadanie, 2 - wybor kropki, 3 - centrowanie
+let outsideCenter = 0;
 let taskCounter = 0;
 let rightEyeGaze = 2;
 let leftEyeGaze = 2;
@@ -326,17 +329,26 @@ function gazeToCenter(isAnswerProper) {
 
     // Uruchomienie funkcji anonimowej, która sprawdza co 500 ms czy wzrok jest w obszarze kwadratu
     // jeśli tak to mozemy wyświetlić następny scenariusz i zakończyć sprawdzanie
-    let intervalId = setInterval(() => {
-        if (leftEyeGaze == 2 && rightEyeGaze == 2) {
+    intervalId1 = setInterval(() => {
+        //proper_gaze = leftEyeGaze[0] > 0.45 && rightEyeGaze[0] > 0.45 && leftEyeGaze[0] < 0.55 && rightEyeGaze[0] < 0.55 && leftEyeGaze[1] > 0.42 && leftEyeGaze[1] < 0.50;
+        if (proper_gaze == 1) {
+            // zatrzymanie mrugania
+            clearInterval(blinkingIntervalId); 
+            clearTimeout(blinkingTimeoutId);
             document.getElementById('centering').style.display = 'none';
             nextScenario(isAnswerProper);
-            clearInterval(intervalId); // Zatrzymanie interwału
+            clearInterval(intervalId1); // Zatrzymanie interwału
         }
     }, 500);
 }
 
 // Funkcja przechodzaca do kolejnego scenariusza
 function nextScenario(isProper) {
+    // Uruchomienie nadzoru
+    // Sprawdzanie co 500ms czy użytkownik nie opuścił centrum okręgu
+    // Jeśli tak to wyświetlamy ekran z centrowaniem
+    intervalId2 = setInterval(etSupervision, 500);  
+    
     if (scenarios.length == 0) {
 
         // Zapis czasu rozpoczęcia i zakończenia eksperymentu
@@ -451,9 +463,9 @@ socket.onopen = () => {
 };
 
 socket.onmessage = (event) => {
-    let message = JSON.parse(event.data).split(" ");
-    leftEyeGaze = parseInt(message[0]);
-    rightEyeGaze = parseInt(message[1]);
+    let message = JSON.parse(event.data).split(",");
+    leftEyeGaze = [parseFloat(message[0]), parseFloat(message[1])];
+    rightEyeGaze = [parseFloat(message[2]), parseFloat(message[3])];
 };
 
 socket.onerror = (error) => {
@@ -466,22 +478,34 @@ socket.onclose = () => {
 
 document.addEventListener("keydown", function(event) {
     if (event.key === ",") {
-        rightEyeGaze = 2;
-        leftEyeGaze = 2;
+        proper_gaze = 2;
     } else if (event.key === ".") {
-        rightEyeGaze = 1;
-        leftEyeGaze = 1;
+        proper_gaze = 1;
     } else if (event.key === "/") {
-        rightEyeGaze = 0;
-        leftEyeGaze = 0;
+        proper_gaze = 0;
     }
 });
 
-// Sprawdzanie co 500ms czy użytkownik nie opuścił centrum okręgu
-// Jeśli tak to wyświetlalmy ekran z centrowaniem
-setInterval(() => {
-    if (state == 1 && leftEyeGaze == 0 && rightEyeGaze == 0){
-        gazeToCenter(false);
+function etSupervision() {
+    // nonproper_gaze = (leftEyeGaze[0] < 0.37 || rightEyeGaze[0] < 0.37) || (leftEyeGaze[0] > 0.63 || rightEyeGaze[0] > 0.63) ||
+    //                  (leftEyeGaze[1] > 0.68 && rightEyeGaze[1] > 0.68) || (leftEyeGaze[1] < 0.35 && rightEyeGaze[1] < 0.35) ||
+    //                  (isNaN(leftEyeGaze[0]) && isNaN(rightEyeGaze[0])) || (isNaN(leftEyeGaze[1]) && isNaN(rightEyeGaze[1]));
+    // if (state == 1 && nonproper_gaze) {
+        if (state == 1 && proper_gaze == 2) {
+        outsideCenter += 1;
+        if (outsideCenter >= 3) {
+            // zatrzymanie mrugania
+            clearInterval(blinkingIntervalId); 
+            clearTimeout(blinkingTimeoutId);
+            
+            clearInterval(intervalId2);
+            outsideCenter = 0;
+            gazeToCenter(false);
+            //console.log("Opuszczono");
+        } else {
+            return;
+        }
+        outsideCenter = 0;
     }
-}, 500);
 
+}

@@ -14,7 +14,7 @@ async def send_gaze_data():
 
     while True:
         try:
-            async with websockets.connect(uri) as websocket:
+            async with websockets.connect(uri, ping_interval=180, ping_timeout=10) as websocket:
                 while True:
                     # Odczytaj dane ze spojrzeń
                     if global_gaze_data == None:
@@ -33,11 +33,11 @@ async def send_gaze_data():
 
         except websockets.exceptions.ConnectionClosedError as e:
             print(f"Połączenie zamknięte: {e}. Próba ponownego połączenia...")
-            await asyncio.sleep(1)  # Poczekaj chwilę przed ponownym połączeniem
+            await asyncio.sleep(0.5)  # Poczekaj chwilę przed ponownym połączeniem
 
         except websockets.exceptions.ConnectionClosedOK:
             print("Połączenie zamknięte przez serwer (normalnie). Ponowne łączenie...")
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
 
 # Znajdz eyetracker
 eyetracker = tr.find_all_eyetrackers()[0]
