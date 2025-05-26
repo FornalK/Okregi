@@ -50,6 +50,13 @@ for (let i = 0; i < dots.length; i++) {
     scenarios = scenarios.concat(new27ScenariosPerDot);
 }
 
+// Usuniecie scenariuszy gdzie zapalaja sie dolne kropki na duzym okregu
+scenarios = scenarios.filter(subArray => {
+  return !(subArray[0] === "ringBig" && [1, 6, 7].includes(subArray[6]));
+});
+
+console.log(scenarios.length);
+
 // algorytm Fisher-Yates Shuffle do losowego mieszania elementow tablicy
 function shuffleTab(tab) {
     for (let i = tab.length - 1; i > 0; i--) {
@@ -75,12 +82,13 @@ let currentUserAnswer;
 let startTimestampSelectDot;
 let intervalId1;
 let intervalId2;
+let proper_gaze;
 let state = 0; // 0 - ekran startowy, 1 - zadanie, 2 - wybor kropki, 3 - centrowanie
 let outsideCenter = 0;
 let taskCounter = 0;
 let rightEyeGaze = 2;
 let leftEyeGaze = 2;
-let numberOfTasks = 216;
+let numberOfTasks = 189;
 let highlightedDots = [];
 let answeredQuestions = [];
 let answeredDots = [];
@@ -149,7 +157,7 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
     gazeToCenter(true);
 });
 
-// Podpięcie funkcji anonimowej, pod przycisk, że nic nie mrygało
+// Podpięcie funkcji anonimowej, pod przycisk, że nic nie mrugało
 document.getElementById('didntBlinkBtn').addEventListener('click', function() {
     answeredDots.push('none');
     
@@ -262,14 +270,14 @@ function selectAnswer(answer) {
     // jeśli ktoś poświęcił zbyt mało czasu na zadanie
     // poniżej 4 sekundy traktujemy, że przeklikał od niechcenia
     if (timeSpentOnTask < 4) {
-        // zatrzymanie mrygania
+        // zatrzymanie mrugania
         clearInterval(blinkingIntervalId); 
         clearTimeout(blinkingTimeoutId);
 
         // informujemy, że użytkownik działa za szybko
         document.getElementById('tooFast').style.display = 'block';
 
-        // wtedy dajemy kolejne zadanie bez możliwości wyboru co mrygało
+        // wtedy dajemy kolejne zadanie bez możliwości wyboru co mrugało
         setTimeout(() => {
             // zresetowanie ustawien elementow html
             document.getElementById('tooFast').style.display = 'none';
@@ -290,24 +298,36 @@ function selectAnswer(answer) {
     // zapisanie w zmiennej czasu pojawienia się ekranu z wyborem kropek
     startTimestampSelectDot = Date.now()
         
-    // Po odpowiedzi wyświetlamy przycisk, że nic nie mrygało lub możliwość zaznaczenia kropki
+    // Po odpowiedzi wyświetlamy przycisk, że nic nie mrugało lub możliwość zaznaczenia kropki
     document.getElementById('didntBlinkText').style.display = 'block';
     document.getElementById('didntBlinkBtn').style.display = 'block';
     
     // Wyswietlamy tez informacje ile na ile scenariuszy zrealizowano
     document.getElementById('taskCounter').style.display = 'block';
 
-    // zatrzymanie starego mrygania gdyby jeszcze trwalo
+    // zatrzymanie starego mrugania gdyby jeszcze trwalo
     clearInterval(blinkingIntervalId); 
     clearTimeout(blinkingTimeoutId);
 
     // Ustawia wyglad kropek oraz nasluchiwanie na klikniecie
     var circles = document.querySelectorAll('.circle');
-    circles.forEach(circle => {
-        circle.style.backgroundColor = "#FFFFFF";
-        circle.style.opacity = "100%";
-        circle.style.cursor = 'pointer';
-    });
+    if (scenario[0] === 'ringBig') {
+        let i = 0;
+        circles.forEach(circle => {
+            if ([0, 2, 3, 4, 5].includes(i)) {
+                circle.style.backgroundColor = "#FFFFFF";
+                circle.style.opacity = "100%";
+                circle.style.cursor = 'pointer';
+            }
+            i++;
+        });
+    } else {
+        circles.forEach(circle => {
+            circle.style.backgroundColor = "#FFFFFF";
+            circle.style.opacity = "100%";
+            circle.style.cursor = 'pointer';
+        });
+    }
 
     // ustawienie stanu aplikacji na odpowiedź urzytkownika
     state = 2;
@@ -396,11 +416,29 @@ function nextScenario(isProper) {
 
     // Ustawia klasy dla kółek
     var circles = document.querySelectorAll('.circle');
-    circles.forEach(circle => {
-        circle.style.backgroundColor = scenario[2];
-        circle.style.opacity = "100%";
-        circle.style.cursor = 'auto';
-    });
+
+    // Dla duzego ringu i malego
+    if (scenario[0] === "ringBig") {
+        let i = 0;
+        circles.forEach(circle => {
+            if ([1, 6, 7].includes(i)) {
+                circle.style.backgroundColor = scenario[2];
+                circle.style.opacity = "0%";
+                circle.style.cursor = 'auto';
+            } else {
+                circle.style.backgroundColor = scenario[2];
+                circle.style.opacity = "100%";
+                circle.style.cursor = 'auto';
+            }
+            i++;
+        });
+    } else {
+         circles.forEach(circle => {
+            circle.style.backgroundColor = scenario[2];
+            circle.style.opacity = "100%";
+            circle.style.cursor = 'auto';
+        });
+    }
 
     circles[0].style.top = scenario[3];
     circles[1].style.bottom = scenario[3];
@@ -416,20 +454,22 @@ function nextScenario(isProper) {
     circles[7].style.bottom = scenario[4];
     circles[7].style.right = scenario[4];
     
-    // Uruchomienie funkcji która ma mrygać
+    // Uruchomienie funkcji która ma mrugać
     delay = Math.random() * 1500 + 1500; // opoznienie od 1.5 do 3 sekund
-    interval = 1000 / scenario[5]; // ile razy na sekunde mryganie
+    interval = 1000 / scenario[5]; // ile razy na sekunde mruganie
     reps = 4 * scenario[5];
     dotNr = scenario[6];
     runBlinking(delay, interval, reps, dotNr);
 
     showNextQuestion();
     timeSpentOnTask = Date.now();
+
+    console.log(scenario);
 }
 
-// Funkcja mrygajaca losowym kolkiem
+// Funkcja mrugajaca kropka
 function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
-    // zatrzymanie starego mrygania
+    // zatrzymanie starego mrugania
     clearInterval(blinkingIntervalId);
     clearTimeout(blinkingTimeoutId);
     const dot = dots[dotNr];
