@@ -92,7 +92,7 @@ let numberOfTasks = 189;
 let highlightedDots = [];
 let answeredQuestions = [];
 let answeredDots = [];
-let availableQuestions = Array.from({ length: 128 }, (_, i) => i + 1);
+let availableQuestions = Array.from({ length: numberOfTasks }, (_, i) => i + 1);
 
 let experimentData = {
     startTime: null,
