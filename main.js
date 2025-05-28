@@ -25,15 +25,15 @@ const scenariosTemplate = [
     ["ringMedium", "ringContrast3", "#ffff00", "287px", "515px", 2],
     ["ringBig", "ringContrast3", "#ffff00", "3px", "315px", 2],
 
-    ["ringSmall", "ringContrast1", "#7b00ff", "571px", "716px", 2],
-    ["ringMedium", "ringContrast1", "#7b00ff", "287px", "515px", 2],
-    ["ringBig", "ringContrast1", "#7b00ff", "3px", "315px", 2],
-    ["ringSmall", "ringContrast2", "#ff0000", "571px", "716px", 2],
-    ["ringMedium", "ringContrast2", "#ff0000", "287px", "515px", 2],
-    ["ringBig", "ringContrast2", "#ff0000", "3px", "315px", 2],
-    ["ringSmall", "ringContrast3", "#ffff00", "571px", "716px", 2],
-    ["ringMedium", "ringContrast3", "#ffff00", "287px", "515px", 2],
-    ["ringBig", "ringContrast3", "#ffff00", "3px", "315px", 2],
+    ["ringSmall", "ringContrast1", "#7b00ff", "571px", "716px", 4],
+    ["ringMedium", "ringContrast1", "#7b00ff", "287px", "515px", 4],
+    ["ringBig", "ringContrast1", "#7b00ff", "3px", "315px", 4],
+    ["ringSmall", "ringContrast2", "#ff0000", "571px", "716px", 4],
+    ["ringMedium", "ringContrast2", "#ff0000", "287px", "515px", 4],
+    ["ringBig", "ringContrast2", "#ff0000", "3px", "315px", 4],
+    ["ringSmall", "ringContrast3", "#ffff00", "571px", "716px", 4],
+    ["ringMedium", "ringContrast3", "#ffff00", "287px", "515px", 4],
+    ["ringBig", "ringContrast3", "#ffff00", "3px", "315px", 4],
 ]
 
 let scenarios = [];
@@ -58,8 +58,6 @@ scenarios = scenarios.filter(subArray => {
 scenarios = scenarios.filter(subArray => {
     return !(subArray[0] === "ringMedium" && subArray[6] == 1);
   });
-
-console.log(scenarios.length);
 
 // algorytm Fisher-Yates Shuffle do losowego mieszania elementow tablicy
 function shuffleTab(tab) {
@@ -244,7 +242,6 @@ function saveDotSelection(nr) {
                 if (scenario[1] == "ringContrast2" && scenarios[i][1] == "ringContrast1")
                     continue;
                 
-                console.log("Usunieto: ", scenarios[i]);
                 scenarios.splice(i, 1);
             }
         }
@@ -386,9 +383,6 @@ function nextScenario(isProper) {
     // Jeśli tak to wyświetlamy ekran z centrowaniem
     clearInterval(intervalId2);
     intervalId2 = setInterval(etSupervision, 200);  
-
-    console.log("pytania:", availableQuestions.length);
-    console.log("scenariusze:", scenarios.length);
     
     if (scenarios.length == 0) {
 
@@ -559,7 +553,6 @@ socket.onclose = () => {
 // });
 
 function etSupervision() {
-    console.log("out:", outsideCenter, "  nonproper:", nonproper_gaze);
     nonproper_gaze = 0;
     if ((leftEyeGaze[0] < 0.42 || rightEyeGaze[0] < 0.42) || (leftEyeGaze[0] > 0.58 || rightEyeGaze[0] > 0.58) ||
                      (leftEyeGaze[1] > 0.7 && rightEyeGaze[1] > 0.7) || (leftEyeGaze[1] < 0.35 && rightEyeGaze[1] < 0.35)) {
