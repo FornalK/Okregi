@@ -4,6 +4,7 @@ const path = require('path');
 const xlsx = require('xlsx');
 const http = require('http');
 const WebSocket = require('ws');
+const { spawn } = require('child_process');
 
 const app = express();
 const PORT = 3000;
@@ -104,39 +105,68 @@ app.post('/save-data', (req, res) => {
     }
 });
 
-// Obsługa WebSocket (nasłuchiwanie wiadomości od Pythona)
-wss.on('connection', (ws) => {
-    console.log('Nowe połączenie WebSocket');
+// Odczytywanie danych z Pythona
+// Uruchamiamy skrypt Python
+const py = spawn('python', ['et_side/main2.py']);
+
+py.stdout.on('data', (data) => {
+    const message = data.toString().trim();
     
-    // Ustawienie ping/pong
-    ws.isAlive = true;
-    ws.on('pong', () => { ws.isAlive = true; });
-
-    // Sprawdzaj co jakiś czas, czy połączenie jest aktywne
-    const interval = setInterval(() => {
-        wss.clients.forEach(client => {
-            if (client.isAlive === false) {
-                console.log('Zamykam połączenie z klientem, bo nie odpowiadał na ping.');
-                return client.terminate();
-            }
-            client.isAlive = false;
-            client.ping();
-        });
-    }, 180000); // Ping co 180 sekund
-
-    ws.on('message', (message) => {
-        console.log('Otrzymano wiadomość od Pythona:', message.toString());
-
-        // Wysyłamy wiadomość do wszystkich podłączonych klientów (np. main.js)
-        wss.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(message.toString());
-            }
-        });
+    console.log('Otrzymano wiadomość od Pythona:', message.toString());
+    
+    // Wysyłamy wiadomość do wszystkich podłączonych klientów (np. main.js)
+    wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message.toString());
+        }
     });
-
-    ws.on('close', () => console.log('Klient WebSocket rozłączony'));
 });
+
+py.stderr.on('data', (data) => {
+    console.error(`Błąd Pythona: ${data.toString()}`);
+});
+
+py.on('close', (code) => {
+    console.log(`Proces Pythona zakończył się z kodem: ${code}`);
+});
+
+wss.on('connection', (ws) => {
+    console.log('Nowy klient WebSocket');
+});
+
+// // Obsługa WebSocket (nasłuchiwanie wiadomości od Pythona)
+// wss.on('connection', (ws) => {
+//     console.log('Nowe połączenie WebSocket');
+    
+//     // Ustawienie ping/pong
+//     ws.isAlive = true;
+//     ws.on('pong', () => { ws.isAlive = true; });
+
+//     // Sprawdzaj co jakiś czas, czy połączenie jest aktywne
+//     const interval = setInterval(() => {
+//         wss.clients.forEach(client => {
+//             if (client.isAlive === false) {
+//                 console.log('Zamykam połączenie z klientem, bo nie odpowiadał na ping.');
+//                 return client.terminate();
+//             }
+//             client.isAlive = false;
+//             client.ping();
+//         });
+//     }, 180000); // Ping co 180 sekund
+
+//     ws.on('message', (message) => {
+//         console.log('Otrzymano wiadomość od Pythona:', message.toString());
+
+//         // Wysyłamy wiadomość do wszystkich podłączonych klientów (np. main.js)
+//         wss.clients.forEach(client => {
+//             if (client.readyState === WebSocket.OPEN) {
+//                 client.send(message.toString());
+//             }
+//         });
+//     });
+
+//     ws.on('close', () => console.log('Klient WebSocket rozłączony'));
+// });
 
 // Uruchom serwer
 server.listen(PORT, () => {

@@ -50,10 +50,14 @@ for (let i = 0; i < dots.length; i++) {
     scenarios = scenarios.concat(new27ScenariosPerDot);
 }
 
-// Usuniecie scenariuszy gdzie zapalaja sie dolne kropki na duzym okregu
+// Usuniecie scenariuszy gdzie zapalaja sie dolne kropki na duzym i srednim okregu
 scenarios = scenarios.filter(subArray => {
   return !(subArray[0] === "ringBig" && [1, 6, 7].includes(subArray[6]));
 });
+
+scenarios = scenarios.filter(subArray => {
+    return !(subArray[0] === "ringMedium" && subArray[6] == 1);
+  });
 
 console.log(scenarios.length);
 
@@ -83,12 +87,15 @@ let startTimestampSelectDot;
 let intervalId1;
 let intervalId2;
 let proper_gaze;
+let nonproper_gaze;
 let state = 0; // 0 - ekran startowy, 1 - zadanie, 2 - wybor kropki, 3 - centrowanie
+let ring = document.getElementById('ring');
+let circles = document.querySelectorAll('.circle');
 let outsideCenter = 0;
 let taskCounter = 0;
 let rightEyeGaze = 2;
 let leftEyeGaze = 2;
-let numberOfTasks = 189;
+let numberOfTasks = 180;
 let highlightedDots = [];
 let answeredQuestions = [];
 let answeredDots = [];
@@ -144,14 +151,6 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
 	this.remove();
 	document.getElementById('instruction').remove();
     textField.remove();
-
-    // Przypisanie do kółek nasluchiwania na kliknięcie
-    var circles = document.querySelectorAll('.circle');
-    circles.forEach((circle, index) => {
-        circle.addEventListener("click", function() {
-            saveDotSelection(index);
-        })
-    });
     
     // Wystartowanie z pierwszym scenariuszem
     gazeToCenter(true);
@@ -245,6 +244,7 @@ function saveDotSelection(nr) {
                 if (scenario[1] == "ringContrast2" && scenarios[i][1] == "ringContrast1")
                     continue;
                 
+                console.log("Usunieto: ", scenarios[i]);
                 scenarios.splice(i, 1);
             }
         }
@@ -274,6 +274,9 @@ function selectAnswer(answer) {
         clearInterval(blinkingIntervalId); 
         clearTimeout(blinkingTimeoutId);
 
+        // ustawienie na stan centorwanie, ktore nastapi po zniknieciu komunikatu
+        state = 3
+
         // informujemy, że użytkownik działa za szybko
         document.getElementById('tooFast').style.display = 'block';
 
@@ -281,8 +284,7 @@ function selectAnswer(answer) {
         setTimeout(() => {
             // zresetowanie ustawien elementow html
             document.getElementById('tooFast').style.display = 'none';
-            // Ustawia wyglad kropek oraz nasluchiwanie na klikniecie
-            var circles = document.querySelectorAll('.circle');
+            // Ustawia wyglad kropek
             circles.forEach(circle => {
                 circle.style.backgroundColor = "#FFFFFF";
                 circle.style.opacity = "100%";
@@ -291,7 +293,7 @@ function selectAnswer(answer) {
 
             // nastepny scenariusz
             gazeToCenter(false);
-        }, 4000);
+        }, 3000);
         return;
     } 
 
@@ -309,12 +311,21 @@ function selectAnswer(answer) {
     clearInterval(blinkingIntervalId); 
     clearTimeout(blinkingTimeoutId);
 
-    // Ustawia wyglad kropek oraz nasluchiwanie na klikniecie
-    var circles = document.querySelectorAll('.circle');
+    // Ustawia wyglad kropek
     if (scenario[0] === 'ringBig') {
         let i = 0;
         circles.forEach(circle => {
             if ([0, 2, 3, 4, 5].includes(i)) {
+                circle.style.backgroundColor = "#FFFFFF";
+                circle.style.opacity = "100%";
+                circle.style.cursor = 'pointer';
+            }
+            i++;
+        });
+    } else if (scenario[0] === 'ringMedium') { 
+        let i = 0;
+        circles.forEach(circle => {
+            if (i != 1) {
                 circle.style.backgroundColor = "#FFFFFF";
                 circle.style.opacity = "100%";
                 circle.style.cursor = 'pointer';
@@ -329,7 +340,12 @@ function selectAnswer(answer) {
         });
     }
 
-    // ustawienie stanu aplikacji na odpowiedź urzytkownika
+    // Przypisanie do kropek nasluchiwania na kliknięcie
+    circles.forEach(circle => {
+        circle.addEventListener("click", handleCircleClick);
+    });
+
+    // ustawienie stanu aplikacji na odpowiedź uzytkownika
     state = 2;
 }
 
@@ -350,8 +366,9 @@ function gazeToCenter(isAnswerProper) {
     // Uruchomienie funkcji anonimowej, która sprawdza co 500 ms czy wzrok jest w obszarze kwadratu
     // jeśli tak to mozemy wyświetlić następny scenariusz i zakończyć sprawdzanie
     intervalId1 = setInterval(() => {
-        //proper_gaze = leftEyeGaze[0] > 0.45 && rightEyeGaze[0] > 0.45 && leftEyeGaze[0] < 0.55 && rightEyeGaze[0] < 0.55 && leftEyeGaze[1] > 0.42 && leftEyeGaze[1] < 0.50;
-        if (proper_gaze == 1) {
+        proper_gaze = leftEyeGaze[0] > 0.45 && rightEyeGaze[0] > 0.45 && leftEyeGaze[0] < 0.55 && rightEyeGaze[0] < 0.55 && leftEyeGaze[1] > 0.46 && leftEyeGaze[1] < 0.54;
+        if (proper_gaze) {
+        //if (proper_gaze == 1) {
             // zatrzymanie mrugania
             clearInterval(blinkingIntervalId); 
             clearTimeout(blinkingTimeoutId);
@@ -365,9 +382,13 @@ function gazeToCenter(isAnswerProper) {
 // Funkcja przechodzaca do kolejnego scenariusza
 function nextScenario(isProper) {
     // Uruchomienie nadzoru
-    // Sprawdzanie co 500ms czy użytkownik nie opuścił centrum okręgu
+    // Sprawdzanie co 200ms czy użytkownik nie opuścił centrum okręgu
     // Jeśli tak to wyświetlamy ekran z centrowaniem
-    intervalId2 = setInterval(etSupervision, 500);  
+    clearInterval(intervalId2);
+    intervalId2 = setInterval(etSupervision, 200);  
+
+    console.log("pytania:", availableQuestions.length);
+    console.log("scenariusze:", scenarios.length);
     
     if (scenarios.length == 0) {
 
@@ -401,27 +422,33 @@ function nextScenario(isProper) {
     }
 
     // Kolejnym scenariuszem jest zawsze ostatni element z tablicy scenariuszy
-    prevScenario = scenario;
     scenario = scenarios.pop()
 
     // Ustawia klas dla okręgu
-    var ring = document.getElementById('ring');
-    if (taskCounter > 0) {
-        ring.classList.remove(prevScenario[0]);
-        ring.classList.remove(prevScenario[1]);
-    }
-
+    ring.className = "";
     ring.classList.add(scenario[0]);
     ring.classList.add(scenario[1]);
 
     // Ustawia klasy dla kółek
-    var circles = document.querySelectorAll('.circle');
-
-    // Dla duzego ringu i malego
+    // Inaczej dla każdej wielkosci
     if (scenario[0] === "ringBig") {
         let i = 0;
         circles.forEach(circle => {
             if ([1, 6, 7].includes(i)) {
+                circle.style.backgroundColor = scenario[2];
+                circle.style.opacity = "0%";
+                circle.style.cursor = 'auto';
+            } else {
+                circle.style.backgroundColor = scenario[2];
+                circle.style.opacity = "100%";
+                circle.style.cursor = 'auto';
+            }
+            i++;
+        });
+    } else if (scenario[0] === "ringMedium") {
+        let i = 0;
+        circles.forEach(circle => {
+            if (i == 1) {
                 circle.style.backgroundColor = scenario[2];
                 circle.style.opacity = "0%";
                 circle.style.cursor = 'auto';
@@ -453,6 +480,12 @@ function nextScenario(isProper) {
     circles[6].style.left = scenario[4];
     circles[7].style.bottom = scenario[4];
     circles[7].style.right = scenario[4];
+
+    // Usuwanie eventListenerów
+    circles.forEach(circle => {
+        circle.removeEventListener("click", handleCircleClick);
+    });
+    
     
     // Uruchomienie funkcji która ma mrugać
     delay = Math.random() * 1500 + 1500; // opoznienie od 1.5 do 3 sekund
@@ -495,7 +528,6 @@ function runBlinking(opoznienie, interwal, liczbaWywolan, dotNr) {
 // Znajdujemy przycisk "DALEJ" i zalaczamy metode do przechodzenia po kolejnych scenariuszach
 const nextScenarioBtn = document.getElementById('nextScenarioBtn');
 
-// obsługa danych ze skryptu pythona
 const socket = new WebSocket('ws://localhost:3000');
 
 socket.onopen = () => {
@@ -503,7 +535,7 @@ socket.onopen = () => {
 };
 
 socket.onmessage = (event) => {
-    let message = JSON.parse(event.data).split(",");
+    let message = event.data.split(",");
     leftEyeGaze = [parseFloat(message[0]), parseFloat(message[1])];
     rightEyeGaze = [parseFloat(message[2]), parseFloat(message[3])];
 };
@@ -516,22 +548,28 @@ socket.onclose = () => {
     console.log('Połączenie WebSocket zamknięte');
 };
 
-document.addEventListener("keydown", function(event) {
-    if (event.key === ",") {
-        proper_gaze = 2;
-    } else if (event.key === ".") {
-        proper_gaze = 1;
-    } else if (event.key === "/") {
-        proper_gaze = 0;
-    }
-});
+// document.addEventListener("keydown", function(event) {
+//     if (event.key === ",") {
+//         proper_gaze = 2;
+//     } else if (event.key === ".") {
+//         proper_gaze = 1;
+//     } else if (event.key === "/") {
+//         proper_gaze = 0;
+//     }
+// });
 
 function etSupervision() {
-    // nonproper_gaze = (leftEyeGaze[0] < 0.37 || rightEyeGaze[0] < 0.37) || (leftEyeGaze[0] > 0.63 || rightEyeGaze[0] > 0.63) ||
-    //                  (leftEyeGaze[1] > 0.68 && rightEyeGaze[1] > 0.68) || (leftEyeGaze[1] < 0.35 && rightEyeGaze[1] < 0.35) ||
-    //                  (isNaN(leftEyeGaze[0]) && isNaN(rightEyeGaze[0])) || (isNaN(leftEyeGaze[1]) && isNaN(rightEyeGaze[1]));
-    // if (state == 1 && nonproper_gaze) {
-        if (state == 1 && proper_gaze == 2) {
+    console.log("out:", outsideCenter, "  nonproper:", nonproper_gaze);
+    nonproper_gaze = 0;
+    if ((leftEyeGaze[0] < 0.42 || rightEyeGaze[0] < 0.42) || (leftEyeGaze[0] > 0.58 || rightEyeGaze[0] > 0.58) ||
+                     (leftEyeGaze[1] > 0.7 && rightEyeGaze[1] > 0.7) || (leftEyeGaze[1] < 0.35 && rightEyeGaze[1] < 0.35)) {
+        nonproper_gaze = 1;
+    } else if ((isNaN(leftEyeGaze[0]) && isNaN(rightEyeGaze[0])) || (isNaN(leftEyeGaze[1]) && isNaN(rightEyeGaze[1]))) {
+        nonproper_gaze = 2;
+    }
+                     
+    if (state == 1 && nonproper_gaze == 2) {
+    //if (state == 1 && proper_gaze == 2) {
         outsideCenter += 1;
         if (outsideCenter >= 3) {
             // zatrzymanie mrugania
@@ -542,10 +580,23 @@ function etSupervision() {
             outsideCenter = 0;
             gazeToCenter(false);
             //console.log("Opuszczono");
-        } else {
-            return;
-        }
+        } 
+    } else if (state == 1 && nonproper_gaze == 1) {
+        // zatrzymanie mrugania
+        clearInterval(blinkingIntervalId); 
+        clearTimeout(blinkingTimeoutId);
+        
+        clearInterval(intervalId2);
+        gazeToCenter(false);
+        //console.log("Opuszczono");
+        outsideCenter = 0;
+    } else {
         outsideCenter = 0;
     }
+}
 
+// Funkcja obsługująca kliknięcie
+function handleCircleClick(event) {
+    const index = Array.from(circles).indexOf(event.currentTarget);
+    saveDotSelection(index);
 }
