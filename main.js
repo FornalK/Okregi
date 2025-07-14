@@ -59,6 +59,8 @@ scenarios = scenarios.filter(subArray => {
     return !(subArray[0] === "ringMedium" && subArray[6] == 1);
   });
 
+console.log(scenarios.length);
+
 // algorytm Fisher-Yates Shuffle do losowego mieszania elementow tablicy
 function shuffleTab(tab) {
     for (let i = tab.length - 1; i > 0; i--) {
@@ -135,10 +137,6 @@ document.getElementById('showCircleBtn').addEventListener('click', function() {
     // Zapis czasu rozpoczęcia eksperymentu
     experimentData.startTime = new Date();
 
-    // zapis do pliku inforamcji o uzytkowniku i czasie startu
-    // saveLine("dots.xlsx", "===");
-    // saveLine("dots.xlsx", user + " " + experimentData.startTime.toISOString() + " " + Date.now());
-
     // Znajdujemy kontener z okręgiem
     var container = document.getElementById('container');
     
@@ -167,8 +165,7 @@ document.getElementById('didntBlinkBtn').addEventListener('click', function() {
 
     //zapis do pliku xlsx
     const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], 'none', startTimestampSelectDot, timestamp, currentQuestionNumber, currentUserAnswer];
-    line = lineElements.join(" ");
-    //saveLine("dots.xlsx", line);
+    let line = lineElements.join(" ");
     saveLine("results.xlsx", line)
 
     //wystartowanie nastepnego scenariusza
@@ -230,8 +227,7 @@ function saveDotSelection(nr) {
 
     //zapis do pliku xlsx
     const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], selectedDotName, startTimestampSelectDot,  timestamp, currentQuestionNumber, currentUserAnswer];
-    line = lineElements.join(" ");
-    //saveLine("dots.xlsx", line);
+    let line = lineElements.join(" ");
     saveLine("results.xlsx", line)
 
     // Jeśli użytkownik dobrze odpowiedział, trzeba sprawdzić czy nie ma wyższych kontrastów
@@ -242,6 +238,7 @@ function saveDotSelection(nr) {
                 if (scenario[1] == "ringContrast2" && scenarios[i][1] == "ringContrast1")
                     continue;
                 
+                console.log("Usunieto: ", scenarios[i]);
                 scenarios.splice(i, 1);
             }
         }
@@ -365,7 +362,6 @@ function gazeToCenter(isAnswerProper) {
     intervalId1 = setInterval(() => {
         proper_gaze = leftEyeGaze[0] > 0.45 && rightEyeGaze[0] > 0.45 && leftEyeGaze[0] < 0.55 && rightEyeGaze[0] < 0.55 && leftEyeGaze[1] > 0.46 && leftEyeGaze[1] < 0.54;
         if (proper_gaze) {
-        //if (proper_gaze == 1) {
             // zatrzymanie mrugania
             clearInterval(blinkingIntervalId); 
             clearTimeout(blinkingTimeoutId);
@@ -391,10 +387,6 @@ function nextScenario(isProper) {
         duration = ((experimentData.endTime - experimentData.startTime) / 1000).toString();
         // zapis do pliku inforamcji o czasie zakonczenia i dlugosci eksp
 
-        // saveLine("dots.xlsx", user + " " + experimentData.endTime.toISOString() + " " + Date.now());
-        // saveLine("dots.xlsx", "Czas trwania: " + duration);
-        // saveLine("dots.xlsx", "===");
-
         // Znajdujemy kontener z okręgiem
         var container = document.getElementById('container');
         
@@ -414,6 +406,9 @@ function nextScenario(isProper) {
         // przeklikane pytanie też spowrotem wrzucamy na listę możliwych pytań
         availableQuestions.push(currentQuestionNumber);
     }
+
+    console.log("pytania:", availableQuestions.length);
+    console.log("scenariusze:", scenarios.length);
 
     // Kolejnym scenariuszem jest zawsze ostatni element z tablicy scenariuszy
     scenario = scenarios.pop()
@@ -573,6 +568,13 @@ function etSupervision() {
             outsideCenter = 0;
             gazeToCenter(false);
             //console.log("Opuszczono");
+
+            //zapis informacji o braku danych
+            let timestamp = Date.now()
+            const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], timestamp, "EyesNotDetected"];
+            let line = lineElements.join(" ");
+            console.log(line)
+            saveLine("leaving_area.xlsx", line);
         } 
     } else if (state == 1 && nonproper_gaze == 1) {
         // zatrzymanie mrugania
@@ -583,6 +585,13 @@ function etSupervision() {
         gazeToCenter(false);
         //console.log("Opuszczono");
         outsideCenter = 0;
+
+        //zapis informacji o braku danych
+        let timestamp = Date.now()
+        const lineElements = [user, scenario[0], scenario[1], scenario[5], dots[scenario[6]], timestamp, "AreaAbandoned"];
+        let line = lineElements.join(" ");
+        console.log(line)
+        saveLine("leaving_area.xlsx", line);
     } else {
         outsideCenter = 0;
     }
